@@ -9,7 +9,10 @@ import {
   TeamOutlined,
   GoldOutlined,
   LineChartOutlined, 
-  BranchesOutlined 
+  BranchesOutlined, 
+  ContainerOutlined,
+  FileSyncOutlined, 
+  BookOutlined 
 } from "@ant-design/icons";
 import { Button, Layout } from "antd";
 import { useState, useEffect } from "react";
@@ -60,9 +63,9 @@ function Sidebar({ chooseHeader }) {
         ]
       : [
           getItem("Dashboard", "/",  <LineChartOutlined />),
-          getItem("Sell Order", "/sell-order",  <LineChartOutlined />),
-          getItem("Purchase Order", "/purchase-order", <GoldOutlined />),
-          getItem("Sell Promotion Order ", "/promotion-sell-order", <BankOutlined />),
+          getItem("Sell Order", "/sell-order",  <ContainerOutlined />),
+          getItem("Purchase Order", "/purchase-order", <FileSyncOutlined />),
+          getItem("Sell Promotion Order ", "/promotion-sell-order", <BookOutlined />),
           // getItem("Breeding", "/breeding", <HomeOutlined />),
         ];
 

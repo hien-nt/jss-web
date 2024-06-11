@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hóa Đơn</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f6f6f6;
+      }
+      .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 24px;
+        color: #333;
+      }
+      .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+        border-collapse: collapse;
+      }
+      .invoice-box table td {
+        padding: 8px;
+        vertical-align: top;
+      }
+      .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+      }
+      .invoice-box table tr.top table td {
+        padding-bottom: 20px;
+      }
+      .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 45px;
+        color: #333;
+      }
+      .invoice-box table tr.information table td {
+        padding-bottom: 30px;
+      }
+      .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+      }
+      .invoice-box table tr.details td {
+        padding-bottom: 20px;
+      }
+      .invoice-box table tr.item td {
+        border-bottom: 1px solid #eee;
+      }
+      .invoice-box table tr.item.last td {
+        border-bottom: none;
+      }
+      .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .signature-section {
+        margin-top: 50px;
+      }
+      .signature-section .signature-box {
+        width: 45%;
+        display: inline-block;
+        text-align: center;
+      }
+      .signature-section .signature-box .line {
+        margin: 120px 0 60px;
+        border-top: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-box">
+      <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td class="title">
+                  <img
+                    src="https://jsssatsupload.blob.core.windows.net/jssats/JSSATS_logo.png"
+                    style="width: 100%; max-width: 300px"
+                  />
+                </td>
+                <td>
+                  <span class="bold">Hóa Đơn #:</span> 37<br /><span
+                    class="bold"
+                    >Ngày Đặt Hàng:</span
+                  >
+                  08/06/2024<br /><span class="bold">Trạng Thái:</span> Paid
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="information">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td>
+                  <span class="bold">Tên Khách Hàng:</span> Phan Van Tiep Em<br />
+                </td>
+                <td><span class="bold">Người Bán:</span> Tiep Em<br /></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="heading">
+          <td>Mặt Hàng</td>
+          <td>Giá (₫)</td>
+        </tr>
+        <tr class="item">
+          <td>Nhẫn KC (x1)</td>
+          <td>15,115,200</td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td><span class="bold">Tổng Cộng:</span> 15,115,200 ₫</td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td><span class="bold">Khuyến Mãi:</span> 0 ₫</td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td><span class="bold">Giảm Giá Thành Viên:</span> 453,456 ₫</td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td><span class="bold">Số Tiền Cuối Cùng:</span> 14,661,744 ₫</td>
+        </tr>
+        <tr class="heading">
+          <td>Hình Thức Thanh Toán</td>
+          <td>Số Tiền (₫)</td>
+        </tr>
+        <tr class="item">
+          <td>Credit Card</td>
+          <td>14,661,744 ₫</td>
+        </tr>
+      </table>
+      <div class="signature-section">
+        <div class="signature-box">
+          <span class="bold">Người Mua Hàng</span>
+          <div class="line"></div>
+        </div>
+        <div class="signature-box" style="float: right">
+          <span class="bold">Người Bán Hàng</span>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

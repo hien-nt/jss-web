@@ -9,10 +9,6 @@ export const SellOrderApi = {
     return axiosClient.get(`/OrderSells/${orderSellId}`);
   },
 
-//   createSellOrder: (payload) => {
-//     return axiosClient.post("/SellOrders", payload);
-//   },
-
   updateSellOrderToPaid: (payload) => {
     return axiosClient.post(`/OrderSells/paid`, payload);
   },
@@ -27,7 +23,4 @@ export const SellOrderApi = {
     });
   }
 
-//   deinactiveSellOrder: (SellOrderId)=> {
-//     return axiosClient.put(`/SellOrders/status/${SellOrderId}`);
-//   }
 };

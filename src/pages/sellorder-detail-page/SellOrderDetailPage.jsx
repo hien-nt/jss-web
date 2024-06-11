@@ -15,11 +15,9 @@ import {
 import { Avatar, Divider, List, Skeleton } from "antd";
 import { Button, Flex } from "antd";
 import {
-  UserOutlined,
   DownloadOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  CheckCircleFilled 
+  CheckCircleFilled,
+  CloseCircleFilled
 } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useParams } from "react-router-dom";
@@ -31,7 +29,7 @@ import { SellOrderApi } from "../../axios/SellOrderApi";
 const { Option } = Select;
 const { Title, Text } = Typography;
 
-const OrderDetailPage = () => {
+const SellOrderDetailPage = () => {
   const { orderSellId } = useParams();
   const [sellOrderData, setSellOrderData] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
@@ -283,11 +281,24 @@ const OrderDetailPage = () => {
     <>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <Card title="Order Status" bordered={false}>
-          <Steps current={currentStep}>
-            {stepStatus.map((step, index) => (
-              <Steps.Step key={index} title={step}  icon={index <= currentStep ? <CheckCircleFilled /> : null}/>
-            ))}
-          </Steps>
+        {status !== "Cancelled" && (
+             <Steps current={currentStep}>
+             {stepStatus.map((step, index) => (
+               <Steps.Step
+                 key={index}
+                 title={step}
+                 icon={index <= currentStep ? <CheckCircleFilled /> : null}
+               />
+             ))}
+           </Steps>
+          )}
+        
+
+          {status === "Cancelled" && (
+            <Title level={4} type="danger">
+              <CloseCircleFilled /> Order Cancelled
+            </Title>
+          )}
         </Card>
 
         <Card
@@ -322,11 +333,11 @@ const OrderDetailPage = () => {
             renderItem={(item) => (
               <List.Item key={item.orderSellDetailId}>
                 <Row style={{ width: "100%" }} align="middle">
-                  <Col span={2}>
+                  <Col span={6}>
                     <Avatar src={item.productImage} shape="square" size={64} />
                   </Col>
                   <Col
-                    span={14}
+                    span={10}
                     style={{
                       paddingLeft: "10px",
                       display: "flex",
@@ -476,4 +487,4 @@ const OrderDetailPage = () => {
   );
 };
 
-export default OrderDetailPage;
+export default SellOrderDetailPage;

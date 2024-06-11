@@ -1,4 +1,4 @@
-import { useState,useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
@@ -6,12 +6,14 @@ import ProtectedLayout from "./auth/ProtectedLayout";
 import { ProtectedRoute } from "./hoc/ProtectedRoute";
 import { message } from "antd";
 import { OrderPage } from "./pages/sell-orders-page/SellOrderPage";
-import OrderDetailPage from "./pages/orders-detail-page/OrderDetailPage";
 import LoginPage from "./pages/login-page/LoginPage";
 import Unauthorized from "./pages/unauthorized-page/Unauthorized";
 import CashierDashboardPage from "./pages/cashier-dashboard/CashierDashboardPage";
 import ManagerDashboardPage from "./pages/manager-dashboard/ManagerDashboardPage";
 import PromotionSellOrderPage from "./pages/promotion-sell-order-page/PromotionSellOrderPage";
+import { BuyBackOrderPage } from "./pages/buyback-order-page/BuybackOrderPage";
+import BuybackOrderDetailPage from "./pages/buybackorder-detail-page/BuybackOrderDetailPage";
+import SellOrderDetailPage from "./pages/sellorder-detail-page/SellOrderDetailPage";
 
 function App() {
   const DashboardRoute = () => {
@@ -46,34 +48,45 @@ function App() {
     return <LoginPage />;
   };
   return (
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginRoute />} />
-          <Route element={<ProtectedLayout />}>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute allowedRoles={["Cashier", "Manager"]}>
-                  <DashboardRoute />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/sell-order" element={<OrderPage />} />
-            <Route path="/purchase-order" element={<OrderPage />} />
-            <Route path="/promotion-sell-order" element={<PromotionSellOrderPage />} />
-
-            <Route
-            path="/sell-order/detail/:orderSellId"
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<LoginRoute />} />
+        <Route element={<ProtectedLayout />}>
+          <Route
+            path="/"
             element={
-              <ProtectedRoute allowedRoles={["Cashier"]}>
-                <OrderDetailPage />
+              <ProtectedRoute allowedRoles={["Cashier", "Manager"]}>
+                <DashboardRoute />
               </ProtectedRoute>
             }
           />
-          </Route>
-        </Routes>
-      </AuthProvider>
-     
+          <Route path="/sell-order" element={<OrderPage />} />
+          <Route path="/purchase-order" element={<BuyBackOrderPage />} />
+          <Route
+            path="/promotion-sell-order"
+            element={<PromotionSellOrderPage />}
+          />
+
+          <Route
+            path="/sell-order/detail/:orderSellId"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier"]}>
+                <SellOrderDetailPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/buyback-order/detail/:orderBuyBackId"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier"]}>
+                <BuybackOrderDetailPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 

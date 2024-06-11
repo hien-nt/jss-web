@@ -32,19 +32,12 @@ const columns = [
     dataIndex: "sellerLastName",
     key: "sellerLastName",
   },
-  // {
-  //   title: "Quầy",
-  //   dataIndex: "counter",
-  //   key: "counter",
-  // },
   {
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
     render: (status) => (
-
       <Tag color={statusColors[status]}>{status.toUpperCase()}</Tag>
-
     )
   },
   {
@@ -69,44 +62,7 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    id: "1",
-    creationDate: "2024-01-01",
-    customer: "John Brown",
-    employee: "Jane Doe",
-    counter: "Counter 1",
-    status: "Processing",
-  },
-  {
-    key: "2",
-    id: "2",
-    creationDate: "2024-01-02",
-    customer: "Jim Green",
-    employee: "Jake Black",
-    counter: "Counter 2",
-    status: "Paid",
-  },
-  {
-    key: "3",
-    id: "3",
-    creationDate: "2024-01-03",
-    customer: "Joe Black",
-    employee: "Jill White",
-    counter: "Counter 3",
-    status: "Delivered",
-  },
-  {
-    key: "4",
-    id: "4",
-    creationDate: "2024-01-03",
-    customer: "Joe Black",
-    employee: "Jill White",
-    counter: "Counter 4",
-    status: "Cancelled",
-  },
-];
+
 
 export const OrderPage = () => {
   const [SellOrders, setSellOrders] = useState([]);

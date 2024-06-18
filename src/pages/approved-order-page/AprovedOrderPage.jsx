@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from "react";
 import { Space, Table, Button, Tag } from "antd";
 import { Link } from "react-router-dom";
-import { getAllSellOrder } from "../../services/SellOrder/SellOrderService";
+import { getApprovedSellOrder } from "../../services/SellOrder/SellOrderService";
 const statusColors = {
   Processing: "#ff7875",
   Paid: "#ffa940", // Darker blue
@@ -66,13 +66,13 @@ const columns = [
 
 
 
-export const OrderPage = () => {
-  const [SellOrders, setSellOrders] = useState([]);
+export const ApprovedOrderPage = () => {
+  const [approvedSellOrders, setApprovredSellOrders] = useState([]);
   useEffect(() => {
-    getAllSellOrder(setSellOrders);
+    getApprovedSellOrder(setApprovredSellOrders);
   }, []);
 
-  return <Table columns={columns} dataSource={SellOrders}  pagination={{
+  return <Table columns={columns} dataSource={approvedSellOrders}  pagination={{
     // current: currentPage,
     pageSizeOptions: ["5", "7", "10"],
     defaultPageSize: 5,

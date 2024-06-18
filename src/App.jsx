@@ -14,13 +14,16 @@ import PromotionSellOrderPage from "./pages/promotion-sell-order-page/PromotionS
 import { BuyBackOrderPage } from "./pages/buyback-order-page/BuybackOrderPage";
 import BuybackOrderDetailPage from "./pages/buybackorder-detail-page/BuybackOrderDetailPage";
 import SellOrderDetailPage from "./pages/sellorder-detail-page/SellOrderDetailPage";
+import ApprovalOrderPage from "./pages/approval-order-page/ApprovalOrderPage";
+import GoldPriceListPage from "./pages/material-price-list/GoldPriceListPage";
+import { ApprovedOrderPage } from "./pages/approved-order-page/AprovedOrderPage";
 
 function App() {
   const DashboardRoute = () => {
     const { user } = useAuth();
     switch (user?.role) {
       case "Cashier":
-        return <CashierDashboardPage />;
+        return <OrderPage />;
       case "Manager":
         return <ManagerDashboardPage />;
       default:
@@ -62,6 +65,12 @@ function App() {
           />
           <Route path="/sell-order" element={<OrderPage />} />
           <Route path="/purchase-order" element={<BuyBackOrderPage />} />
+          <Route path="/approval-order" element={<ApprovalOrderPage />} />
+          <Route path="/approved-order" element={<ApprovedOrderPage />} />
+
+          <Route path="/gold-price" element={<GoldPriceListPage />} />
+
+
           <Route
             path="/promotion-sell-order"
             element={<PromotionSellOrderPage />}
@@ -81,6 +90,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["Cashier"]}>
                 <BuybackOrderDetailPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/approval-order/detail/:orderSellId"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <SellOrderDetailPage />
               </ProtectedRoute>
             }
           />

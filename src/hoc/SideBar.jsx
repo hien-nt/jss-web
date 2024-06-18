@@ -1,11 +1,7 @@
 import React from "react";
 import { Flex, Menu } from "antd";
-import { FireOutlined, HomeOutlined } from "@ant-design/icons";
 import {
-  TwitterOutlined,
   BankOutlined,
-  DingdingOutlined,
-  LogoutOutlined,
   TeamOutlined,
   GoldOutlined,
   LineChartOutlined, 
@@ -22,7 +18,6 @@ import CustomHeader from "./Header";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import logo from "../assets/jss_logo.jpg";
-// import getUserInfor from "../utils/getUserInfor";
 import { useAuth } from "../hooks/useAuth";
 
 const { Sider, Header, Content } = Layout;
@@ -35,18 +30,7 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-// const ManagerItems = [
-//   getItem("Dashboard", "/", <LineChartOutlined />),
-//   getItem("Area", "/area", <GoldOutlined />),
-//   getItem("Cage", "/cage", <BankOutlined />),
-//   getItem("Breeding Management", "/breeding", <HomeOutlined />),
-//   getItem("Bird Information", "sub", <TwitterOutlined />, [
-//     getItem("Bird", "/bird"),
-//     // getItem("Type", "/type"),
-//     getItem("Species", "/specie"),
-//   ]),
-//   getItem("Staff", "/staff", <TeamOutlined />),
-// ];
+
 
 function Sidebar({ chooseHeader }) {
   const { user } = useAuth();
@@ -56,16 +40,16 @@ function Sidebar({ chooseHeader }) {
     role === "Manager"
       ? [
           getItem("Dashboard", "/",  <LineChartOutlined />),
-          getItem("Farm", "/farm", <GoldOutlined />),
+          getItem("Approval Order", "/approval-order", <GoldOutlined />),
           getItem("Area", "/area", <BankOutlined />),
           getItem("Species", "/species", <BranchesOutlined /> ),
           getItem("Account", "/account", <TeamOutlined />),
         ]
       : [
-          getItem("Dashboard", "/",  <LineChartOutlined />),
+          // getItem("Dashboard", "/",  <LineChartOutlined />),
           getItem("Sell Order", "/sell-order",  <ContainerOutlined />),
           getItem("Purchase Order", "/purchase-order", <FileSyncOutlined />),
-          getItem("Sell Promotion Order ", "/promotion-sell-order", <BookOutlined />),
+          getItem("Sell Promotion Order ", "/approved-order", <BookOutlined />),
           // getItem("Breeding", "/breeding", <HomeOutlined />),
         ];
 
@@ -135,7 +119,7 @@ function MenuBar() {
   };
   
   const [headerTitle, setHeaderTitle] = useState(() => {
-    return sessionStorage.getItem('headerTitle') || 'Dashboard';
+    return sessionStorage.getItem('headerTitle') || 'JSS';
   });
   return (
     <Layout>

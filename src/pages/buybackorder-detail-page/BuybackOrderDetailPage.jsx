@@ -51,43 +51,43 @@ const BuyBackOrderDetailPage = () => {
   }, [orderBuyBackId]);
   // console.log(BuyBackOrderData);
 
-  //   const fetchInvoice = async () => {
-  //     try {
-  //       const response = await BuyBackOrderApi.viewOrderBuyBackInvoice(orderBuyBackId);
-  //       console.log(response);
-  //       const htmlContent = await response.data; // Assuming the API returns HTML directly
-  //       setInvoiceHtml(htmlContent);
-  //       setIsModalInvoiceVisible(true);
-  //     } catch (error) {
-  //       console.error("Failed to fetch invoice:", error);
-  //     }
-  //   };
+    const fetchInvoice = async () => {
+      try {
+        const response = await BuyBackOrderApi.viewOrderBuyBackInvoice(orderBuyBackId);
+        console.log(response);
+        const htmlContent = await response.data; // Assuming the API returns HTML directly
+        setInvoiceHtml(htmlContent);
+        setIsModalInvoiceVisible(true);
+      } catch (error) {
+        console.error("Failed to fetch invoice:", error);
+      }
+    };
 
-  //   const handleOpenInvoice = () => {
-  //     fetchInvoice();
-  //   };
+    const handleOpenInvoice = () => {
+      fetchInvoice();
+    };
 
-  //   const handleDownload = async () => {
-  //     try {
-  //       const response = await BuyBackOrderApi.exportOrderBuyBackInvoice(orderBuyBackId);
+    const handleDownload = async () => {
+      try {
+        const response = await BuyBackOrderApi.exportOrderBuyBackInvoice(orderBuyBackId);
 
-  //       const url = window.URL.createObjectURL(
-  //         new Blob([response.data], { type: "application/pdf" })
-  //       );
-  //       const link = document.createElement("a");
-  //       link.href = url;
-  //       link.setAttribute("download", `Invoice_OrderBuyBack_${orderBuyBackId}.pdf`); // Dynamic filename
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       link.remove();
-  //     } catch (error) {
-  //       console.error("Error downloading the file", error);
-  //     }
-  //   };
+        const url = window.URL.createObjectURL(
+          new Blob([response.data], { type: "application/pdf" })
+        );
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Invoice_OrderBuyBack_${orderBuyBackId}.pdf`); // Dynamic filename
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (error) {
+        console.error("Error downloading the file", error);
+      }
+    };
 
-  //   const handleCancelInvoice = () => {
-  //     setIsModalInvoiceVisible(false);
-  //   };
+    const handleCancelInvoice = () => {
+      setIsModalInvoiceVisible(false);
+    };
 
   const handleUpdateStatus = async () => {
     const payload = {
@@ -288,7 +288,7 @@ const BuyBackOrderDetailPage = () => {
           <Button
             type="primary"
             size="large"
-            // onClick={handleOpenInvoice}
+            onClick={handleOpenInvoice}
             style={{ width: "100%", marginTop: "20px" }}
           >
             Xem hóa đơn
@@ -320,7 +320,7 @@ const BuyBackOrderDetailPage = () => {
         </Form>
       </Modal>
 
-      {/* <Modal
+      <Modal
         title="Invoice"
         visible={isModalInvoiceVisible}
         onCancel={handleCancelInvoice}
@@ -343,7 +343,7 @@ const BuyBackOrderDetailPage = () => {
             </Button>
           </Col>
         </Row>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

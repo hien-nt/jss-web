@@ -1,12 +1,10 @@
 import React,{useState, useEffect} from "react";
-import { Space, Table, Button, Tag } from "antd";
+import { Space, Table, Button, Tag, ConfigProvider } from "antd";
 import { Link } from "react-router-dom";
-import { getAllSellOrder } from "../../services/SellOrder/SellOrderService";
+import { getApprovalSellOrder } from "../../services/SellOrder/SellOrderService";
 const statusColors = {
-  Processing: "#ff7875",
-  Paid: "#ffa940", // Darker blue
-  Approval:"#36cfc9",
-  Approved:"#4096ff",
+  Paid: "#ff7875",
+  Processing: "#69b1ff", // Darker blue
   Delivered: "#95de64",
   Cancelled: "#595959", // Very light gray or alternative color for visual distinction
 };
@@ -46,7 +44,7 @@ const columns = [
     title: "Cập nhật",
     key: "update",
       render: (text, record) => (
-        <Link to={`/sell-order/detail/${record.orderSellId}`}>
+        <Link to={`/approval-order/detail/${record.orderSellId}`}>
          Chi tiết đơn hàng
         </Link>
       ),
@@ -64,18 +62,29 @@ const columns = [
   },
 ];
 
-
-
-export const OrderPage = () => {
-  const [SellOrders, setSellOrders] = useState([]);
+const ApprovalOrderPage = () => {
+  const [approvalSellOrder, setApprovalSellOrders] = useState([]);
   useEffect(() => {
-    getAllSellOrder(setSellOrders);
+    getApprovalSellOrder(setApprovalSellOrders);
   }, []);
 
-  return <Table columns={columns} dataSource={SellOrders}  pagination={{
+  return (
+    <ConfigProvider
+    theme={{
+      token: {
+       headerColor: "#00b96b"
+      },
+    }}
+  >
+    <Table columns={columns} dataSource={approvalSellOrder}  pagination={{
     // current: currentPage,
     pageSizeOptions: ["5", "7", "10"],
     defaultPageSize: 5,
     showSizeChanger: true,
-  }}/>;
-};
+  }}/>
+  </ConfigProvider>
+ )
+  ;
+}
+
+export default ApprovalOrderPage

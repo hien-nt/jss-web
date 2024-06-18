@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  Form,
-  Input,
-  Select,
-  Table,
-  Typography,
-  Modal,
-  Steps,
-  Descriptions,
-  Row,
-  Col,
-  Card,
-} from "antd";
-import { Avatar, Divider, List, Skeleton } from "antd";
-import { Button, Flex } from "antd";
+import { Form, Select, Typography, Modal, Steps, Row, Col, Card } from "antd";
+import { Avatar, List } from "antd";
+import { Button } from "antd";
 import {
   DownloadOutlined,
   CheckCircleFilled,
-  CloseCircleFilled
+  CloseCircleFilled,
 } from "@ant-design/icons";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useParams } from "react-router-dom";
 import {
   getSellOrderBySellOrderId,
+  updateSellOrderPromotionDiscount,
   updateSellOrderToPaid,
 } from "../../services/SellOrder/SellOrderService";
 import { SellOrderApi } from "../../axios/SellOrderApi";
@@ -33,11 +21,16 @@ const SellOrderDetailPage = () => {
   const { orderSellId } = useParams();
   const [sellOrderData, setSellOrderData] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
+  const [discountPercent, setDiscountPercent] = useState([]);
   const [selectedPaymentType, setSelectedPaymentType] = useState(null);
   const [isModalUpdatePaidOrderOpen, setIsModalUpdatePaidOrderOpen] =
     useState(false);
   const [invoiceHtml, setInvoiceHtml] = useState("");
   const [isModalInvoiceVisible, setIsModalInvoiceVisible] = useState(false);
+
+  const [isModalPromotionDiscountOpen, setIsModalPromotionDiscountOpen] =
+    useState(false);
+  const [selectedDiscountPercent, setSelectedDiscountPercent] = useState(null);
 
   useEffect(() => {
     getSellOrderBySellOrderId(orderSellId, setSellOrderData);
@@ -47,6 +40,13 @@ const SellOrderDetailPage = () => {
       { paymentTypeId: 3, paymentTypeName: "Bank Transfer", status: "Active" },
       { paymentTypeId: 4, paymentTypeName: "Mobile Payment", status: "Active" },
       { paymentTypeId: 5, paymentTypeName: "PayPal", status: "Active" },
+    ]);
+    setDiscountPercent([
+      { discountId: 1, discountPercent: 10 },
+      { discountId: 2, discountPercent: 20 },
+      { discountId: 3, discountPercent: 30 },
+      { discountId: 4, discountPercent: 40 },
+      { discountId: 5, discountPercent: 50 },
     ]);
   }, [orderSellId]);
   // console.log(sellOrderData);
@@ -107,146 +107,58 @@ const SellOrderDetailPage = () => {
     );
   };
 
-  // const showModal = () => setIsModalOpen(true);
-  // const handleCancel = () => setIsModalOpen(false);
   const handleSelectChange = (value) => setSelectedPaymentType(value);
 
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const showModalUpdateOrderToPaid = () => {
     setIsModalUpdatePaidOrderOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancelPaidOrderUpdate = () => {
     setIsModalUpdatePaidOrderOpen(false);
   };
-  const columns = [
-    {
-      title: "Items",
-      dataIndex: "item",
-      key: "item",
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-  ];
 
-  const dataProduct = [
-    {
-      key: "1",
-      item: "Dây chuyền vàng 24k",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "2.500.000 VND",
-    },
-    {
-      key: "2",
-      item: "Nhẫn kim cương đính hạt ruby",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "5.500.000 VND",
-    },
-    {
-      key: "3",
-      item: "Nhẫn bạc đính hạt ruby",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "2.500.000 VND",
-    },
-    {
-      key: "3",
-      item: "Nhẫn bạc đính hạt ruby",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "2.500.000 VND",
-    },
-    {
-      key: "3",
-      item: "Nhẫn bạc đính hạt ruby",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "2.500.000 VND",
-    },
-    {
-      key: "3",
-      item: "Nhẫn bạc đính hạt ruby",
-      type: "Vàng 24k",
-      quantity: "1",
-      price: "2.500.000 VND",
-    },
-  ];
-
-  const description = "This is a description.";
-
-  const items = [
-    {
-      key: "1",
-      label: "Name",
-      children: "Zhou Maomao",
-    },
-    {
-      key: "2",
-      label: "Telephone",
-      children: "1810000000",
-    },
-    {
-      key: "3",
-      label: "Order Date",
-      children: "31/05/2024",
-    },
-  ];
-
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch(
-      "https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo"
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+  //discount-percent
+  const showModalPromotionDiscount = () => {
+    setIsModalPromotionDiscountOpen(true);
   };
 
-  useEffect(() => {
-    loadMoreData();
-  }, []);
+  const handleCancelPromotionDiscount = () => {
+    setIsModalPromotionDiscountOpen(false);
+  };
+
+  const handleUpdatePromotionDiscount = async () => {
+    const payload = {
+      individualPromotionDiscount: selectedDiscountPercent,
+    };
+    updateSellOrderPromotionDiscount(
+      payload,
+      orderSellId,
+      setSellOrderData,
+      setIsModalPromotionDiscountOpen
+    );
+  };
+
   const {
     customerName,
     customerPhone,
     sellerFirstName,
     sellerLastName,
     orderSellDetails,
-    payments=[],
+    payments = [],
     totalAmount,
+    invidualPromotionDiscount,
     memberShipDiscount,
     memberShipDiscountPercent,
+    promotionReason,
     finalAmount,
     status,
   } = sellOrderData;
 
-  const stepStatus = ["Processing", "Paid", "Delivered"];
+  const stepsWithoutPromotion = ["Processing", "Paid", "Delivered"];
+  const stepsWithPromotion = ["Approval", "Approved", "Paid", "Delivered"];
+  const stepStatus = promotionReason !== "string"
+    ? stepsWithPromotion
+    : stepsWithoutPromotion;
   const currentStep = stepStatus.indexOf(status);
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -255,44 +167,21 @@ const SellOrderDetailPage = () => {
     }).format(amount);
   };
   return (
-    // <div style={{ maxWidth: 600, margin: "0 auto" }}>
-    //
-    //   {sellOrderData && (
-    //     <>
-    //       <Descriptions title="Order Info">
-    //         <Descriptions.Item label="Status">
-    //           {sellOrderData.status}
-    //         </Descriptions.Item>
-    //       </Descriptions>
-
-    //       <Button type="primary" onClick={showModal}>
-    //         Update Payment and Status
-    //       </Button>
-
-    //     </>
-    //   )}
-
-    //   <Button type="primary" onClick={handleOpenInvoice}>
-    //     View Invoice
-    //   </Button>
-
-    // </div>
-
     <>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+        {/*Order Status*/}
         <Card title="Order Status" bordered={false}>
-        {status !== "Cancelled" && (
-             <Steps current={currentStep}>
-             {stepStatus.map((step, index) => (
-               <Steps.Step
-                 key={index}
-                 title={step}
-                 icon={index <= currentStep ? <CheckCircleFilled /> : null}
-               />
-             ))}
-           </Steps>
+          {status !== "Cancelled" && (
+            <Steps current={currentStep}>
+              {stepStatus.map((step, index) => (
+                <Steps.Step
+                  key={index}
+                  title={step}
+                  icon={index <= currentStep ? <CheckCircleFilled /> : null}
+                />
+              ))}
+            </Steps>
           )}
-        
 
           {status === "Cancelled" && (
             <Title level={4} type="danger">
@@ -301,6 +190,7 @@ const SellOrderDetailPage = () => {
           )}
         </Card>
 
+        {/*Customer information*/}
         <Card
           title="Customer Information"
           bordered={false}
@@ -322,6 +212,7 @@ const SellOrderDetailPage = () => {
           </Row>
         </Card>
 
+        {/*Order Detail*/}
         <Card
           title={`Order #${orderSellId} Details`}
           bordered={false}
@@ -365,6 +256,7 @@ const SellOrderDetailPage = () => {
           />
         </Card>
 
+        {/*Amount Informaton*/}
         <Card
           title="Payment Information"
           bordered={false}
@@ -390,6 +282,36 @@ const SellOrderDetailPage = () => {
           </Row>
         </Card>
 
+        {/*Promotion Informaton*/}
+        {(status === "Approval" || status === "Approved") && (
+          <Card
+            title="Promotion Information"
+            bordered={false}
+            style={{ marginTop: "20px", marginBottom: "20px" }}
+          >
+            <Row>
+              <Col span={12}>
+                <Text strong>Promotion Reason:</Text>
+              </Col>
+              <Col span={12} style={{ textAlign: "right" }}>
+                <Text strong>{promotionReason}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Text strong>Promotion Discount:</Text>
+              </Col>
+              <Col span={12} style={{ textAlign: "right" }}>
+                {invidualPromotionDiscount == null ||
+                invidualPromotionDiscount === 0
+                  ? "Chưa cập nhật"
+                  : <Text strong>-{formatCurrency(invidualPromotionDiscount)}</Text>}
+              </Col>
+            </Row>
+          </Card>
+        )}
+
+        {/*Final amount, payment Detail*/}
         <Card title="Final Amount">
           <Row>
             <Col span={12}>
@@ -407,12 +329,19 @@ const SellOrderDetailPage = () => {
               <Text strong>Payment Method:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
-              <Text strong> {payments.length > 0 ? payments[0].paymentTypeName : "Chưa thanh toán"}</Text>
+              <Text strong>
+                {" "}
+                {payments.length > 0
+                  ? payments[0].paymentTypeName
+                  : "Chưa thanh toán"}
+              </Text>
             </Col>
           </Row>
         </Card>
 
-        {status === "Processing" && (
+        {/*Button update order payment informaton*/}
+
+        {(status === "Processing" || status === "Approved") && (
           <Button
             type="primary"
             size="large"
@@ -423,6 +352,7 @@ const SellOrderDetailPage = () => {
           </Button>
         )}
 
+        {/*Button view, dowload invoice*/}
         {(status === "Paid" || status === "Delivered") && (
           <Button
             type="primary"
@@ -433,8 +363,21 @@ const SellOrderDetailPage = () => {
             Xem hóa đơn
           </Button>
         )}
+
+        {/*Button update promotion discount*/}
+        {status === "Approval" && (
+          <Button
+            type="primary"
+            size="large"
+            onClick={showModalPromotionDiscount}
+            style={{ width: "100%", marginTop: "20px" }}
+          >
+            Cập nhật khuyến mãi
+          </Button>
+        )}
       </div>
 
+      {/*Modal update order paid*/}
       <Modal
         title="Update Order Status"
         visible={isModalUpdatePaidOrderOpen}
@@ -459,6 +402,7 @@ const SellOrderDetailPage = () => {
         </Form>
       </Modal>
 
+      {/*Modal view, dowload invoice*/}
       <Modal
         title="Invoice"
         visible={isModalInvoiceVisible}
@@ -482,6 +426,33 @@ const SellOrderDetailPage = () => {
             </Button>
           </Col>
         </Row>
+      </Modal>
+
+      <Modal
+        title="Cập nhật khuyến mãi"
+        visible={isModalPromotionDiscountOpen}
+        onOk={handleUpdatePromotionDiscount}
+        onCancel={handleCancelPromotionDiscount}
+        okText="Cập nhật"
+        cancelText="Hủy bỏ"
+      >
+        <Form layout="vertical">
+          <Form.Item label="Chọn phần trăm khuyến mãi">
+            <Select
+              onChange={(value) => setSelectedDiscountPercent(value)}
+              placeholder="Chọn phần trăm khuyến mãi"
+            >
+              {discountPercent.map((discount) => (
+                <Option
+                  key={discount.discountId}
+                  value={discount.discountPercent}
+                >
+                  {discount.discountPercent}%
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

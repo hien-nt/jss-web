@@ -32,11 +32,11 @@ const columns = [
   },
 ];
 
-const GoldPricePage = ({ materialTypeId }) => {
+const SliverPricePage = ({ materialTypeId }) => {
   const [materialsPrice, setMaterialsPrice] = useState([]);
 
   useEffect(() => {
-    getMaterialPrice(1, setMaterialsPrice);
+    getMaterialPrice(2, setMaterialsPrice);
   }, [materialTypeId]);
 
   return (
@@ -52,4 +52,4 @@ const GoldPricePage = ({ materialTypeId }) => {
   );
 };
 
-export default GoldPricePage;
+export default SliverPricePage;

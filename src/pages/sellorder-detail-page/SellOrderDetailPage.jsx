@@ -14,11 +14,14 @@ import {
   updateSellOrderToPaid,
 } from "../../services/SellOrder/SellOrderService";
 import { SellOrderApi } from "../../axios/SellOrderApi";
+import getUserInfor from "../../utils/getUserInfor";
 const { Option } = Select;
 const { Title, Text } = Typography;
 
 const SellOrderDetailPage = () => {
   const { orderSellId } = useParams();
+  const {user} = getUserInfor();
+  const role = user.role
   const [sellOrderData, setSellOrderData] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
   const [discountPercent, setDiscountPercent] = useState([]);
@@ -50,6 +53,8 @@ const SellOrderDetailPage = () => {
     ]);
   }, [orderSellId]);
   // console.log(sellOrderData);
+
+  
 
   const fetchInvoice = async () => {
     try {
@@ -283,7 +288,7 @@ const SellOrderDetailPage = () => {
         </Card>
 
         {/*Promotion Informaton*/}
-        {(status === "Approval" || status === "Approved") && (
+        {promotionReason !== "string" && (
           <Card
             title="Promotion Information"
             bordered={false}
@@ -302,9 +307,8 @@ const SellOrderDetailPage = () => {
                 <Text strong>Promotion Discount:</Text>
               </Col>
               <Col span={12} style={{ textAlign: "right" }}>
-                {invidualPromotionDiscount == null ||
-                invidualPromotionDiscount === 0
-                  ? "Chưa cập nhật"
+                {invidualPromotionDiscount === null
+                  ? <Text strong>Chưa cập nhật</Text>
                   : <Text strong>-{formatCurrency(invidualPromotionDiscount)}</Text>}
               </Col>
             </Row>
@@ -341,7 +345,7 @@ const SellOrderDetailPage = () => {
 
         {/*Button update order payment informaton*/}
 
-        {(status === "Processing" || status === "Approved") && (
+        {(role == "Cashier" && status === "Processing" || status === "Approved") && (
           <Button
             type="primary"
             size="large"

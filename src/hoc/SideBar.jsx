@@ -40,10 +40,11 @@ function Sidebar({ chooseHeader }) {
     role === "Manager"
       ? [
           getItem("Dashboard", "/",  <LineChartOutlined />),
-          getItem("Approval Order", "/approval-order", <GoldOutlined />),
-          getItem("Area", "/area", <BankOutlined />),
-          getItem("Species", "/species", <BranchesOutlined /> ),
-          getItem("Account", "/account", <TeamOutlined />),
+          getItem("Approval Order", "/approval-order", <BookOutlined />),
+          getItem("Product", "/product", <BankOutlined />),
+          getItem("Gold Price", "/gold-price", <GoldOutlined/> ),
+          getItem("Sliver Price", "/sliver-price", <BranchesOutlined /> ),
+          // getItem("Account", "/account", <TeamOutlined />),
         ]
       : [
           // getItem("Dashboard", "/",  <LineChartOutlined />),

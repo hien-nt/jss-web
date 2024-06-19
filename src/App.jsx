@@ -17,6 +17,8 @@ import SellOrderDetailPage from "./pages/sellorder-detail-page/SellOrderDetailPa
 import ApprovalOrderPage from "./pages/approval-order-page/ApprovalOrderPage";
 import GoldPriceListPage from "./pages/material-price-list/GoldPriceListPage";
 import { ApprovedOrderPage } from "./pages/approved-order-page/AprovedOrderPage";
+import { ProductPage } from "./pages/product-page/ProductPage";
+import SliverPricePage from "./pages/material-price-list/SliverPriceListPage";
 
 function App() {
   const DashboardRoute = () => {
@@ -67,8 +69,10 @@ function App() {
           <Route path="/purchase-order" element={<BuyBackOrderPage />} />
           <Route path="/approval-order" element={<ApprovalOrderPage />} />
           <Route path="/approved-order" element={<ApprovedOrderPage />} />
-
           <Route path="/gold-price" element={<GoldPriceListPage />} />
+          <Route path="/sliver-price" element={<SliverPricePage />} />
+          <Route path="/product" element={<ProductPage />} />
+
 
 
           <Route

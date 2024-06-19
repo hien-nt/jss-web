@@ -14,14 +14,14 @@ import {
   updateSellOrderToPaid,
 } from "../../services/SellOrder/SellOrderService";
 import { SellOrderApi } from "../../axios/SellOrderApi";
-import getUserInfor from "../../utils/getUserInfor";
+// import getUserInfor from "../../utils/getUserInfor";
 const { Option } = Select;
 const { Title, Text } = Typography;
 
 const SellOrderDetailPage = () => {
   const { orderSellId } = useParams();
-  const {user} = getUserInfor();
-  const role = user.role
+  // const {user} = getUserInfor();
+  // const role = user.role
   const [sellOrderData, setSellOrderData] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
   const [discountPercent, setDiscountPercent] = useState([]);

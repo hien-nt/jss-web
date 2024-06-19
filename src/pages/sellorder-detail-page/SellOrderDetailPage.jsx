@@ -345,7 +345,7 @@ const SellOrderDetailPage = () => {
 
         {/*Button update order payment informaton*/}
 
-        {(role == "Cashier" && status === "Processing" || status === "Approved") && (
+        {(status === "Processing" || status === "Approved") && (
           <Button
             type="primary"
             size="large"

@@ -93,7 +93,7 @@ const Dashboard = () => {
           <SummaryCard>
             <Statistic
               title="Total Revenue"
-              value={112893}
+              value={11893}
               precision={2}
               valueStyle={{ color: '#3f8600' }}
               prefix="$"

@@ -30,6 +30,7 @@ import CreateProductForm from "./pages/product-page/CreateProductForm";
 import ClientGoldPricePage from "./pages/material-price-list/ClientGoldPricePage";
 import ClientSliverPricePage from "./pages/material-price-list/ClientSliverPrice";
 import ClientPage from "./pages/material-price-list/ClientPage";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
   const DashboardRoute = () => {
@@ -38,7 +39,7 @@ function App() {
       case "Cashier":
         return <OrderPage />;
       case "Manager":
-        return <ManagerDashboardPage />;
+        return <Dashboard />;
       default:
         // Redirect or show an unauthorized message for users with no role or unrecognized roles
         return <Unauthorized />;

@@ -4,11 +4,11 @@ import {
   BankOutlined,
   TeamOutlined,
   GoldOutlined,
-  LineChartOutlined, 
-  BranchesOutlined, 
+  LineChartOutlined,
+  BranchesOutlined,
   ContainerOutlined,
-  FileSyncOutlined, 
-  BookOutlined 
+  FileSyncOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import { Button, Layout } from "antd";
 import { useState, useEffect } from "react";
@@ -31,7 +31,6 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
-
 function Sidebar({ chooseHeader }) {
   const { user } = useAuth();
   const role = user.role;
@@ -39,16 +38,37 @@ function Sidebar({ chooseHeader }) {
   const items =
     role === "Manager"
       ? [
-          getItem("Dashboard", "/",  <LineChartOutlined />),
+          getItem("Dashboard", "/", <LineChartOutlined />),
+          getItem("Counter", "/counters", <GoldOutlined />),
+          getItem("Account", "/accounts", <GoldOutlined />),
+          getItem("Customer", "/customers", <GoldOutlined />),
+
           getItem("Approval Order", "/approval-order", <BookOutlined />),
-          getItem("Product", "/product", <BankOutlined />),
-          getItem("Gold Price", "/gold-price", <GoldOutlined/> ),
-          getItem("Sliver Price", "/sliver-price", <BranchesOutlined /> ),
+          getItem("Product", "/products", <BankOutlined />),
+          getItem("Category", "sub2", <BranchesOutlined />, [
+            getItem("Category Type", "/category-types"),
+            getItem("Category", "/category"),
+          ]),
+          getItem("Material", "/materials", <GoldOutlined />),
+
+        
+
+
+          getItem("Price List", "sub", <BranchesOutlined />, [
+            getItem("Gold Price", "/gold-price"),
+            getItem("Sliver Price", "/sliver-price"),
+            getItem("Diamond Price", "/diamond-price"),
+          ]),
+
+          // getItem("Gold Price", "/gold-price", <GoldOutlined />),
+          // getItem("Sliver Price", "/sliver-price", <BranchesOutlined />),
+          // getItem("Diamond Price", "/diamond-price", <BranchesOutlined />),
+
           // getItem("Account", "/account", <TeamOutlined />),
         ]
       : [
           // getItem("Dashboard", "/",  <LineChartOutlined />),
-          getItem("Sell Order", "/sell-order",  <ContainerOutlined />),
+          getItem("Sell Order", "/sell-order", <ContainerOutlined />),
           getItem("Purchase Order", "/purchase-order", <FileSyncOutlined />),
           getItem("Sell Promotion Order ", "/approved-order", <BookOutlined />),
           // getItem("Breeding", "/breeding", <HomeOutlined />),
@@ -83,8 +103,8 @@ function Sidebar({ chooseHeader }) {
             backgroundImage: `url(${logo})`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
-            height: "110px",
-            width: "120px",
+            height: "80px",
+            width: "100px",
           }}
         >
           {/* The content of this div can remain empty if you just want to show the logo */}
@@ -106,7 +126,10 @@ function Sidebar({ chooseHeader }) {
             }
           }
         }}
-        items={items}
+        items={items.map((item) => ({
+          ...item,
+          className: "small-menu-item",
+        }))}
       />
     </>
   );
@@ -115,12 +138,12 @@ function Sidebar({ chooseHeader }) {
 function MenuBar() {
   const [collapsed, setCollapsed] = useState(false);
   const chooseHeader = (header) => {
-    sessionStorage.setItem('headerTitle', header); // Save to session storage
-    setHeaderTitle(header);  // Update local state
+    sessionStorage.setItem("headerTitle", header); // Save to session storage
+    setHeaderTitle(header); // Update local state
   };
-  
+
   const [headerTitle, setHeaderTitle] = useState(() => {
-    return sessionStorage.getItem('headerTitle') || 'JSS';
+    return sessionStorage.getItem("headerTitle") || "JSS";
   });
   return (
     <Layout>

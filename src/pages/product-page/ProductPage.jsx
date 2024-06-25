@@ -6,6 +6,7 @@ const statusColors = {
   'Còn hàng': "#95de64",
   'Hết hàng': "#595959",
 };
+
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -24,7 +25,7 @@ const columns = [
     dataIndex: "img",
     key: "img",
     render: (image) => (
-      <img src={image} alt="Product" style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+      <img src={image} alt="Product" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
     )
   },
   {
@@ -38,13 +39,13 @@ const columns = [
     key: "counterName",
   },
   {
-    title: "Product Price",
+    title: "Sell Price",
     dataIndex: "productPrice",
     key: "productPrice",
     render: (price) => formatCurrency(price),  // Use formatCurrency to render price
   },
   {
-    title: "Buy Back Price",
+    title: "Buy Price",
     dataIndex: "buyBackPrice",
     key: "buyBackPrice",
     render: (price) => formatCurrency(price),  // Use formatCurrency to render buy back price

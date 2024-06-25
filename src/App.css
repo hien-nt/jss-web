@@ -23,24 +23,30 @@
   top: 0;
 }
 .logo {
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin: 10px 0px;
 }
 .menu-bar {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap: 10px; */
   font-weight: 500;
 }
 .ant-menu-item-selected {
   background-color: black !important;
   color: white !important;
 }
-
-
-
 .ant-table-pagination-right {
   justify-content: center !important;
+}
+
+.small-menu-item {
+ height: 35px !important;
+}
+
+.small-menu-item > .menu-submenu-title {
+  height: 35px !important;
+  margin-bottom: 10px !important;
 }
 
 

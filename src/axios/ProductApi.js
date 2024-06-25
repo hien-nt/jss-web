@@ -5,4 +5,10 @@ export const ProductApi = {
     return axiosClient.get("/Products/allProducts");
   },
 
+  createProduct: (payload) => {
+    return axiosClient.post("/Products/create", payload);
+  },
+
+
+
 };

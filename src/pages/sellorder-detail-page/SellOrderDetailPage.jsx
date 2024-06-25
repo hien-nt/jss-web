@@ -161,7 +161,7 @@ const SellOrderDetailPage = () => {
 
   const stepsWithoutPromotion = ["Processing", "Paid", "Delivered"];
   const stepsWithPromotion = ["Approval", "Approved", "Paid", "Delivered"];
-  const stepStatus = promotionReason !== "string"
+  const stepStatus = promotionReason !== ""
     ? stepsWithPromotion
     : stepsWithoutPromotion;
   const currentStep = stepStatus.indexOf(status);
@@ -288,7 +288,7 @@ const SellOrderDetailPage = () => {
         </Card>
 
         {/*Promotion Informaton*/}
-        {promotionReason !== "string" && (
+        {(promotionReason !== "string" && promotionReason !== "") && (
           <Card
             title="Promotion Information"
             bordered={false}

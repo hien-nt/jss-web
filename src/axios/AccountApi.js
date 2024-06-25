@@ -8,19 +8,17 @@ export const AccountApi = {
     return axiosClient.post("/Accounts/signup", payload);
   },
 
+  updateAccount: (accountId, payload) => {
+    return axiosClient.put(`/Accounts/${accountId}`, payload);
+  },
 
-  // updateAccount: (accountId, payload) => {
-  //   return axiosClient.put(`/Accounts/${accountId}`, payload);
-  // },
-  // updateAdminAccount: (payload) => {
-  //   return axiosClient.put(`/Accounts/UpdateProfileAdmin`, payload);
-  // },
-  // getManagerAccount: () => {
-  //   return axiosClient.get("/Accounts/managers");
-  // },
-  // getStaffAccount: () => {
-  //   return axiosClient.get("/Accounts/staffs");
-  // },
+  getSellerAccount: () => {
+    return axiosClient.get("/Accounts/sellers");
+  },
+
+  getAccount: () => {
+    return axiosClient.get("/Accounts/allAccount");
+  },
   // getStaffAccountByFarm: () => {
   //   return axiosClient.get("/Accounts/staffs/farm");
   // },

@@ -8,8 +8,12 @@ export const DiamondApi = {
   getDiamonds: () => {
     return axiosClient.get("/Diamonds");
   },
-
+  createDiamondWithPrice: (payload) => {
+    return axiosClient.post("/Diamonds/CreateDiamondWithPrice", payload);
+  },
   updateDiamondPrice: (diamondPriceId, payload) => {
     return axiosClient.put(`/DiamondPrices/${diamondPriceId}`, payload);
   },
+
+
 };

@@ -17,7 +17,7 @@ import SellOrderDetailPage from "./pages/sellorder-detail-page/SellOrderDetailPa
 import ApprovalOrderPage from "./pages/approval-order-page/ApprovalOrderPage";
 import GoldPriceListPage from "./pages/material-price-list/GoldPriceListPage";
 import { ApprovedOrderPage } from "./pages/approved-order-page/AprovedOrderPage";
-import { ProductPage } from "./pages/product-page/ProductPage";
+import ProductPage from "./pages/product-page/ProductPage";
 import SliverPricePage from "./pages/material-price-list/SliverPriceListPage";
 import DiamondPricePage from "./pages/material-price-list/DiamondPriceListPage";
 import CounterPage from "./pages/counter-page/CounterPage";
@@ -67,9 +67,7 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
-        <Route path="/gold-price-client" element={<ClientGoldPricePage />} />
-        <Route path="/sliver-price-client" element={<ClientSliverPricePage />} />
-        <Route path="/client-price" element={<ClientPage />} />
+        <Route path="/client-pricelist" element={<ClientPage />} />
 
 
 

@@ -45,49 +45,60 @@ const BuyBackOrderDetailPage = () => {
   useEffect(() => {
     getBuyBackOrderByBuyBackOrderId(orderBuyBackId, setBuyBackOrderData);
     setPaymentTypes([
-      { paymentTypeId: 2, paymentTypeName: "Cash", status: "Active" },
-      { paymentTypeId: 3, paymentTypeName: "Bank Transfer", status: "Active" },
+      { paymentTypeId: 2, paymentTypeName: "Tiền mặt", status: "Active" },
+      {
+        paymentTypeId: 3,
+        paymentTypeName: "Thanh toán chuyển khoản",
+        status: "Active",
+      },
     ]);
   }, [orderBuyBackId]);
   // console.log(BuyBackOrderData);
 
-    const fetchInvoice = async () => {
-      try {
-        const response = await BuyBackOrderApi.viewOrderBuyBackInvoice(orderBuyBackId);
-        console.log(response);
-        const htmlContent = await response.data; // Assuming the API returns HTML directly
-        setInvoiceHtml(htmlContent);
-        setIsModalInvoiceVisible(true);
-      } catch (error) {
-        console.error("Failed to fetch invoice:", error);
-      }
-    };
+  const fetchInvoice = async () => {
+    try {
+      const response = await BuyBackOrderApi.viewOrderBuyBackInvoice(
+        orderBuyBackId
+      );
+      console.log(response);
+      const htmlContent = await response.data; // Assuming the API returns HTML directly
+      setInvoiceHtml(htmlContent);
+      setIsModalInvoiceVisible(true);
+    } catch (error) {
+      console.error("Failed to fetch invoice:", error);
+    }
+  };
 
-    const handleOpenInvoice = () => {
-      fetchInvoice();
-    };
+  const handleOpenInvoice = () => {
+    fetchInvoice();
+  };
 
-    const handleDownload = async () => {
-      try {
-        const response = await BuyBackOrderApi.exportOrderBuyBackInvoice(orderBuyBackId);
+  const handleDownload = async () => {
+    try {
+      const response = await BuyBackOrderApi.exportOrderBuyBackInvoice(
+        orderBuyBackId
+      );
 
-        const url = window.URL.createObjectURL(
-          new Blob([response.data], { type: "application/pdf" })
-        );
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `Invoice_OrderBuyBack_${orderBuyBackId}.pdf`); // Dynamic filename
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      } catch (error) {
-        console.error("Error downloading the file", error);
-      }
-    };
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `Invoice_OrderBuyBack_${orderBuyBackId}.pdf`
+      ); // Dynamic filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading the file", error);
+    }
+  };
 
-    const handleCancelInvoice = () => {
-      setIsModalInvoiceVisible(false);
-    };
+  const handleCancelInvoice = () => {
+    setIsModalInvoiceVisible(false);
+  };
 
   const handleUpdateStatus = async () => {
     const payload = {
@@ -145,42 +156,40 @@ const BuyBackOrderDetailPage = () => {
   return (
     <>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <Card title="Order Status" bordered={false}>
-
-        {status !== "Cancelled" && (
-             <Steps current={currentStep}>
-             {stepStatus.map((step, index) => (
-               <Steps.Step
-                 key={index}
-                 title={step}
-                 icon={index <= currentStep ? <CheckCircleFilled /> : null}
-               />
-             ))}
-           </Steps>
+        <Card title="Trạng thái đơn hàng" bordered={false}>
+          {status !== "Cancelled" && (
+            <Steps current={currentStep}>
+              {stepStatus.map((step, index) => (
+                <Steps.Step
+                  key={index}
+                  title={step}
+                  icon={index <= currentStep ? <CheckCircleFilled /> : null}
+                />
+              ))}
+            </Steps>
           )}
-        
 
           {status === "Cancelled" && (
             <Title level={4} type="danger">
-              <CloseCircleFilled /> Order Cancelled
+              <CloseCircleFilled /> Đơn đã hủy
             </Title>
           )}
         </Card>
 
         <Card
-          title="Customer Information"
+          title="Thông tin khách hàng"
           bordered={false}
           style={{ marginTop: "20px" }}
         >
           <Row>
             <Col span={12}>
-              <Text style={{ fontSize: "16px" }}>Name: </Text>{" "}
+              <Text style={{ fontSize: "16px" }}>Tên: </Text>{" "}
               <Text strong style={{ fontSize: "14px" }}>
                 {customerName}
               </Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
-              <Text style={{ fontSize: "16px" }}>Phone: </Text>{" "}
+              <Text style={{ fontSize: "16px" }}>Số điện thoại: </Text>{" "}
               <Text strong style={{ fontSize: "14px" }}>
                 {customerPhone}
               </Text>
@@ -199,11 +208,11 @@ const BuyBackOrderDetailPage = () => {
             renderItem={(item) => (
               <List.Item key={item.orderBuyBackDetailId}>
                 <Row style={{ width: "100%" }} align="middle">
-                  <Col span={6}>
+                  {/* <Col span={6}>
                     <Avatar src={item.productImage} shape="square" size={64} />
-                  </Col>
+                  </Col> */}
                   <Col
-                    span={10}
+                    span={14}
                     style={{
                       paddingLeft: "10px",
                       display: "flex",
@@ -213,7 +222,7 @@ const BuyBackOrderDetailPage = () => {
                     <Text strong>{item.productName}</Text>
                   </Col>
                   <Col
-                    span={4}
+                    span={6}
                     style={{
                       textAlign: "center",
                       display: "flex",
@@ -232,13 +241,13 @@ const BuyBackOrderDetailPage = () => {
         </Card>
 
         <Card
-          title="Payment Information"
+          title="Thông tin thanh toán"
           bordered={false}
           style={{ marginTop: "20px", marginBottom: "20px" }}
         >
           <Row>
             <Col span={12}>
-              <Text strong>Total Amount:</Text>
+              <Text strong>Tổng tiền hàng:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong>{formatCurrency(totalAmount)}</Text>
@@ -246,10 +255,10 @@ const BuyBackOrderDetailPage = () => {
           </Row>
         </Card>
 
-        <Card title="Final Amount">
+        <Card title="Giá tiền cần thanh toán">
           <Row>
             <Col span={12}>
-              <Text strong>Final Amount:</Text>
+              <Text strong>Tổng tiền:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong style={{ color: "#ff4d4f", fontSize: "20px" }}>
@@ -260,7 +269,7 @@ const BuyBackOrderDetailPage = () => {
 
           <Row>
             <Col span={12}>
-              <Text strong>Payment Method:</Text>
+              <Text strong>Phương thức thanh toán:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong>
@@ -280,7 +289,7 @@ const BuyBackOrderDetailPage = () => {
             onClick={showModalUpdateOrderToPaid}
             style={{ width: "100%", marginTop: "20px" }}
           >
-            Cập nhật thanh toán cho khách hàng
+            Xác nhận thanh toán cho khách hàng
           </Button>
         )}
 
@@ -305,7 +314,7 @@ const BuyBackOrderDetailPage = () => {
         cancelText="Cancel"
       >
         <Form layout="vertical">
-          <Form.Item label="Chọn hình thức thanh toán">
+          <Form.Item label="Xác nhận hình thức thanh toán cho khách hàng">
             <Select
               onChange={handleSelectChange}
               placeholder="Select a payment type"

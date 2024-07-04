@@ -10,39 +10,48 @@ const FlexContainer = styled.div`
   margin-bottom: 16px;
 `;
 const columns = [
+  // {
+  //   title: "Customer ID",
+  //   dataIndex: "customerId",
+  //   key: "customerId",
+  // },
   {
-    title: "Customer ID",
-    dataIndex: "customerId",
-    key: "customerId",
-  },
-  {
-    title: "Tier Name",
-    dataIndex: "tierName",
-    key: "tierName",
-  },
-  {
-    title: "Name",
+    title: "Tên",
     dataIndex: "name",
     key: "name",
   },
+  
+  
   {
-    title: "Phone",
+    title: "Số điện thoại",
     dataIndex: "phone",
     key: "phone",
   },
   {
-    title: "Address",
+    title: "Địa chỉ",
     dataIndex: "address",
     key: "address",
     render: (address) => (address ? address : "N/A"),
   },
   {
-    title: "Loyalty Points",
+    title: "Hạng",
+    dataIndex: "tierName",
+    key: "tierName",
+    filters: [
+      { text: "Hạng Đồng", value: "Hạng Đồng" },
+      { text: "Hạng Bạc", value: "Hạng Bạc" },
+      { text: "Hạng Vàng", value: "Hạng Vàng" },
+      { text: "Hạng Kim Cương", value: "Hạng Kim Cương" },
+    ],
+    onFilter: (value, record) => record.tierName.indexOf(value) === 0,
+  },
+  {
+    title: "Điểm tích lũy",
     dataIndex: "loyaltyPoints",
     key: "loyaltyPoints",
   },
   {
-    title: "Discount Percent",
+    title: "Discount",
     dataIndex: "discountPercent",
     key: "discountPercent",
     render: (discountPercent) => `${discountPercent}%`,

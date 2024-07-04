@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Table, Tag, Button, Input, Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { getCategoryTypes, createCategoryType, updateCategoryType, createCategory } from "../../services/Category/CategoryServices";
+import {
+  getCategoryTypes,
+  createCategoryType,
+  updateCategoryType,
+  createCategory,
+} from "../../services/Category/CategoryServices";
 import styled from "styled-components";
 import CategoryTypeForm from "./components/CategoryTypeForm";
 
@@ -12,21 +17,31 @@ const FlexContainer = styled.div`
   margin-bottom: 16px;
 `;
 
-const columns = (showModalForEdit) => [
-  {
-    title: "Category Type ID",
-    dataIndex: "categoryTypeId",
-    key: "categoryTypeId",
-  },
+const columns = (showModalForEdit, categoryType) => [
+  // {
+  //   title: "Category Type ID",
+  //   dataIndex: "categoryTypeId",
+  //   key: "categoryTypeId",
+  // },
   {
     title: "Category Type Name",
     dataIndex: "categoryTypeName",
     key: "categoryTypeName",
+    filters: categoryType.map((categoryType) => ({
+      text: `${categoryType.categoryTypeName}`,
+      value: categoryType.categoryTypeName,
+    })),
+    onFilter: (value, record) => record.categoryTypeName === value,
   },
   {
     title: "Status",
     dataIndex: "status",
     key: "status",
+    filters: [
+      { text: "Active", value: "Active" },
+      { text: "Inactive", value: "Inactive" },
+    ],
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => (
       <Tag color={status === "Active" ? "green" : "red"}>{status}</Tag>
     ),
@@ -89,7 +104,12 @@ const CategoryTypePage = () => {
         categoryTypeName: values.categoryTypeName,
       };
 
-      await updateCategoryType(categoryTypeId, updatePayload, setIsModalVisible, setCategoryType);
+      await updateCategoryType(
+        categoryTypeId,
+        updatePayload,
+        setIsModalVisible,
+        setCategoryType
+      );
     } else {
       await createCategoryType(payload, setIsModalVisible, setCategoryType);
     }
@@ -98,7 +118,9 @@ const CategoryTypePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCategoryType = categoryType.filter((categoryType) =>
-    categoryType.categoryTypeName.toLowerCase().includes(searchTerm.toLowerCase())
+    categoryType.categoryTypeName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
@@ -119,7 +141,7 @@ const CategoryTypePage = () => {
         </Button>
       </FlexContainer>
       <Table
-        columns={columns(showModalForEdit)}
+        columns={columns(showModalForEdit, categoryType)}
         dataSource={filteredCategoryType}
         pagination={{
           pageSizeOptions: ["5", "10", "15"],

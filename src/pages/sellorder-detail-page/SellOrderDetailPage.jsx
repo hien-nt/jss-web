@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Form, Select, Typography, Modal, Steps, Row, Col, Card } from "antd";
+import {
+  Form,
+  Select,
+  Typography,
+  Modal,
+  Steps,
+  Row,
+  Col,
+  Card,
+  Alert,
+} from "antd";
 import { Avatar, List } from "antd";
 import { Button } from "antd";
 import {
@@ -14,12 +24,15 @@ import {
   updateSellOrderToPaid,
 } from "../../services/SellOrder/SellOrderService";
 import { SellOrderApi } from "../../axios/SellOrderApi";
+import { useAuth } from "../../hooks/useAuth";
 // import getUserInfor from "../../utils/getUserInfor";
+
 const { Option } = Select;
 const { Title, Text } = Typography;
 
 const SellOrderDetailPage = () => {
   const { orderSellId } = useParams();
+  const { user } = useAuth();
   // const {user} = getUserInfor();
   // const role = user.role
   const [sellOrderData, setSellOrderData] = useState([]);
@@ -38,11 +51,18 @@ const SellOrderDetailPage = () => {
   useEffect(() => {
     getSellOrderBySellOrderId(orderSellId, setSellOrderData);
     setPaymentTypes([
-      { paymentTypeId: 1, paymentTypeName: "Credit Card", status: "Active" },
-      { paymentTypeId: 2, paymentTypeName: "Cash", status: "Active" },
-      { paymentTypeId: 3, paymentTypeName: "Bank Transfer", status: "Active" },
-      { paymentTypeId: 4, paymentTypeName: "Mobile Payment", status: "Active" },
-      { paymentTypeId: 5, paymentTypeName: "PayPal", status: "Active" },
+      { paymentTypeId: 1, paymentTypeName: "Thẻ tín dụng", status: "Active" },
+      { paymentTypeId: 2, paymentTypeName: "Tiền mặt", status: "Active" },
+      {
+        paymentTypeId: 3,
+        paymentTypeName: "Thanh toán chuyển khoản",
+        status: "Active",
+      },
+      {
+        paymentTypeId: 4,
+        paymentTypeName: "Ví điện tử",
+        status: "Active",
+      },
     ]);
     setDiscountPercent([
       { discountId: 1, discountPercent: 10 },
@@ -50,11 +70,14 @@ const SellOrderDetailPage = () => {
       { discountId: 3, discountPercent: 30 },
       { discountId: 4, discountPercent: 40 },
       { discountId: 5, discountPercent: 50 },
+      { discountId: 6, discountPercent: 60 },
+      { discountId: 7, discountPercent: 70 },
+      { discountId: 8, discountPercent: 80 },
+      { discountId: 9, discountPercent: 90 },
+      { discountId: 10, discountPercent: 100 },
     ]);
   }, [orderSellId]);
   // console.log(sellOrderData);
-
-  
 
   const fetchInvoice = async () => {
     try {
@@ -161,9 +184,8 @@ const SellOrderDetailPage = () => {
 
   const stepsWithoutPromotion = ["Processing", "Paid", "Delivered"];
   const stepsWithPromotion = ["Approval", "Approved", "Paid", "Delivered"];
-  const stepStatus = promotionReason !== ""
-    ? stepsWithPromotion
-    : stepsWithoutPromotion;
+  const stepStatus =
+    promotionReason !== "" ? stepsWithPromotion : stepsWithoutPromotion;
   const currentStep = stepStatus.indexOf(status);
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -175,7 +197,7 @@ const SellOrderDetailPage = () => {
     <>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         {/*Order Status*/}
-        <Card title="Order Status" bordered={false}>
+        <Card title="Trạng thái đơn hàng" bordered={false}>
           {status !== "Cancelled" && (
             <Steps current={currentStep}>
               {stepStatus.map((step, index) => (
@@ -190,26 +212,26 @@ const SellOrderDetailPage = () => {
 
           {status === "Cancelled" && (
             <Title level={4} type="danger">
-              <CloseCircleFilled /> Order Cancelled
+              <CloseCircleFilled /> Đơn đã hủy
             </Title>
           )}
         </Card>
 
         {/*Customer information*/}
         <Card
-          title="Customer Information"
+          title="Thông tin khách hàng"
           bordered={false}
           style={{ marginTop: "20px" }}
         >
           <Row>
             <Col span={12}>
-              <Text style={{ fontSize: "16px" }}>Name: </Text>{" "}
+              <Text style={{ fontSize: "16px" }}>Tên: </Text>{" "}
               <Text strong style={{ fontSize: "14px" }}>
                 {customerName}
               </Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
-              <Text style={{ fontSize: "16px" }}>Phone: </Text>{" "}
+              <Text style={{ fontSize: "16px" }}>Số điện thoại: </Text>{" "}
               <Text strong style={{ fontSize: "14px" }}>
                 {customerPhone}
               </Text>
@@ -219,7 +241,7 @@ const SellOrderDetailPage = () => {
 
         {/*Order Detail*/}
         <Card
-          title={`Order #${orderSellId} Details`}
+          title={`Order #${orderSellId} Chi tiết`}
           bordered={false}
           style={{ marginTop: "20px" }}
         >
@@ -263,13 +285,13 @@ const SellOrderDetailPage = () => {
 
         {/*Amount Informaton*/}
         <Card
-          title="Payment Information"
+          title="Thông tin thanh toán"
           bordered={false}
           style={{ marginTop: "20px", marginBottom: "20px" }}
         >
           <Row>
             <Col span={12}>
-              <Text strong>Total Amount:</Text>
+              <Text strong>Tổng tiền hàng:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong>{formatCurrency(totalAmount)}</Text>
@@ -288,9 +310,9 @@ const SellOrderDetailPage = () => {
         </Card>
 
         {/*Promotion Informaton*/}
-        {(promotionReason !== "string" && promotionReason !== "") && (
+        {promotionReason !== "string" && promotionReason !== "" && (
           <Card
-            title="Promotion Information"
+            title="Thông tin khuyến mãi"
             bordered={false}
             style={{ marginTop: "20px", marginBottom: "20px" }}
           >
@@ -307,19 +329,23 @@ const SellOrderDetailPage = () => {
                 <Text strong>Promotion Discount:</Text>
               </Col>
               <Col span={12} style={{ textAlign: "right" }}>
-                {invidualPromotionDiscount === null
-                  ? <Text strong>Chưa cập nhật</Text>
-                  : <Text strong>-{formatCurrency(invidualPromotionDiscount)}</Text>}
+                {invidualPromotionDiscount === null ? (
+                  <Text strong>Chưa cập nhật</Text>
+                ) : (
+                  <Text strong>
+                    -{formatCurrency(invidualPromotionDiscount)}
+                  </Text>
+                )}
               </Col>
             </Row>
           </Card>
         )}
 
         {/*Final amount, payment Detail*/}
-        <Card title="Final Amount">
+        <Card title="Giá tiền cần thanh toán">
           <Row>
             <Col span={12}>
-              <Text strong>Final Amount:</Text>
+              <Text strong>Thành tiền:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong style={{ color: "#ff4d4f", fontSize: "20px" }}>
@@ -330,7 +356,7 @@ const SellOrderDetailPage = () => {
 
           <Row>
             <Col span={12}>
-              <Text strong>Payment Method:</Text>
+              <Text strong>Phương thức thanh toán:</Text>
             </Col>
             <Col span={12} style={{ textAlign: "right" }}>
               <Text strong>
@@ -345,16 +371,35 @@ const SellOrderDetailPage = () => {
 
         {/*Button update order payment informaton*/}
 
-        {(status === "Processing" || status === "Approved") && (
+        {/* {(status === "Processing" || status === "Approved") && (
           <Button
             type="primary"
             size="large"
             onClick={showModalUpdateOrderToPaid}
             style={{ width: "100%", marginTop: "20px" }}
           >
-            Cập nhật thanh toán
+            Xác nhận thanh toán
           </Button>
-        )}
+        )} */}
+
+        {(status === "Processing" || status === "Approved") &&
+          (user.role === "Cashier" ? (
+            <Button
+              type="primary"
+              size="large"
+              onClick={showModalUpdateOrderToPaid}
+              style={{ width: "100%", marginTop: "20px" }}
+            >
+              Xác nhận thanh toán
+            </Button>
+          ) : (
+            <Alert
+              // message="Info Text"
+              style={{ marginTop: "20px" }}
+              description="Chờ thu nhân xác nhận thanh toán"
+              type="info"
+            />
+          ))}
 
         {/*Button view, dowload invoice*/}
         {(status === "Paid" || status === "Delivered") && (
@@ -368,8 +413,8 @@ const SellOrderDetailPage = () => {
           </Button>
         )}
 
-        {/*Button update promotion discount*/}
-        {status === "Approval" && (
+        {/*Button update promotion discount, manager only*/}
+        {/* {(user.role === "Manager" && status === "Approval") && (
           <Button
             type="primary"
             size="large"
@@ -378,7 +423,25 @@ const SellOrderDetailPage = () => {
           >
             Cập nhật khuyến mãi
           </Button>
-        )}
+        )} */}
+        {status === "Approval" &&
+          (user.role === "Manager" ? (
+            <Button
+              type="primary"
+              size="large"
+              onClick={showModalPromotionDiscount}
+              style={{ width: "100%", marginTop: "20px" }}
+            >
+              Cập nhật khuyến mãi
+            </Button>
+          ) : (
+            <Alert
+              // message="Info Text"
+              style={{ marginTop: "20px" }}
+              description="Chờ quản lý cập nhật khuyến mãi"
+              type="info"
+            />
+          ))}
       </div>
 
       {/*Modal update order paid*/}
@@ -391,7 +454,7 @@ const SellOrderDetailPage = () => {
         cancelText="Cancel"
       >
         <Form layout="vertical">
-          <Form.Item label="Chọn hình thức thanh toán">
+          <Form.Item label="Xác nhận hình thức thanh toán của khách hàng">
             <Select
               onChange={handleSelectChange}
               placeholder="Select a payment type"

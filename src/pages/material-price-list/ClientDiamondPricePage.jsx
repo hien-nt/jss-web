@@ -101,11 +101,14 @@ const DiamondPriceTable = ({ diamondPrices, caratRange }) => {
   );
 };
 
-const ClientDiamondPricePage = () => {
+const ClientDiamondPricePage = ({origin}) => {
   const [diamondPrices, setDiamondPrices] = useState([]);
 
   useEffect(() => {
-    getDiamondPrices(setDiamondPrices);
+    getDiamondPrices((prices) => {
+      const naturalDiamonds = prices.filter((price) => price.origin === origin);
+      setDiamondPrices(naturalDiamonds);
+    });
   }, []);
 
   // Separate diamond prices by carat weight ranges

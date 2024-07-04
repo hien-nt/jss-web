@@ -10,6 +10,7 @@ import {
 } from "../../services/Account/AccountServices";
 import AccountForm from "./components/AccountForm";
 import styled from "styled-components";
+import { FileAPI } from "../../axios/FileApi";
 
 const FlexContainer = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const columns = (showModalForEdit) => [
     ),
   },
   {
-    title: "Username",
+    title: "Tài khoản",
     dataIndex: "username",
     key: "username",
   },
@@ -42,25 +43,35 @@ const columns = (showModalForEdit) => [
     key: "email",
   },
   {
-    title: "Phone",
+    title: "Số  điện thoại",
     dataIndex: "phone",
     key: "phone",
   },
 
   {
-    title: "Address",
+    title: "Địa Chỉ",
     dataIndex: "address",
     key: "address",
   },
   {
-    title: "Role",
+    title: "Vị trí",
     dataIndex: "role",
     key: "role",
+    filters: [
+      { text: "Seller", value: "Seller" },
+      { text: "Cashier", value: "Cashier" },
+    ],
+    onFilter: (value, record) => record.role.indexOf(value) === 0,
   },
   {
-    title: "Status",
+    title: "Tráng thái",
     dataIndex: "status",
     key: "status",
+    filters: [
+      { text: "Active", value: "Active" },
+      { text: "Inactive", value: "Inactive" },
+    ],
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => (
       <Tag color={status === "Active" ? "green" : "red"}>{status}</Tag>
     ),
@@ -95,6 +106,18 @@ const SellerPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const customRequest = async (options) => {
+    const { onSuccess, onError, file } = options;
+
+    try {
+      const response = await FileAPI.uploadFile(file);
+      onSuccess(response.data, file);
+    } catch (error) {
+      console.error("Upload error:", error);
+      onError(error);
+    }
+  };
+
   const handleFormCancel = (form) => {
     setIsModalVisible(false);
     form.resetFields();
@@ -118,6 +141,7 @@ const SellerPage = () => {
       password: values.password,
       // firstName: values.firstName,
       // lastName: values.lastName,
+      imageUrl: values.imageUrl,
       phone: values.phone,
       email: values.email,
       address: values.address,
@@ -132,11 +156,17 @@ const SellerPage = () => {
         phone: values.phone,
         email: values.email,
         address: values.address,
+        imageUrl: values.imageUrl,
         role: values.role,
         counterId: values.counterId,
       };
 
-      await updateAccount(accountId, updatePayload, setIsModalVisible, setAccounts);
+      await updateAccount(
+        accountId,
+        updatePayload,
+        setIsModalVisible,
+        setAccounts
+      );
     } else {
       await createAccount(payload, setIsModalVisible, setAccounts);
     }
@@ -183,6 +213,7 @@ const SellerPage = () => {
         initialData={currentAccount}
         isEditing={isEditing}
         counters={counters}
+        customRequest={customRequest}
       />
     </>
   );

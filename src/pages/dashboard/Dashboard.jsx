@@ -1,14 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Statistic, Table } from "antd";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 import styled from "styled-components";
-
+import {
+  getSumRevenueAndByCate,
+  getOrderAndCusCount,
+  getBestSeller,
+  getProductSaleData
+} from "../../services/Dashboard/DashboardService";
+import { getCustomers } from "../../services/Customer/CustomerServices";
+// import { getSellers } from "../../services/Account/AccountServices";
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+};
 const DashboardContainer = styled.div`
   padding: 24px;
   background: #f0f2f5;
 `;
+
+const StyledBarChart = styled(BarChart)`
+  .recharts-surface {
+    width: 105% !important;
+    height: 100%;
+  }`;
+
 
 const SummaryCard = styled(Card)`
   margin-bottom: 24px;
@@ -16,15 +45,28 @@ const SummaryCard = styled(Card)`
 
 const Dashboard = () => {
   const [revenueData, setRevenueData] = useState([]);
-  const [categoryRevenueData, setCategoryRevenueData] = useState([]);
-  const [ordersData, setOrdersData] = useState([]);
-  const [customerIncomeData, setCustomerIncomeData] = useState([]);
-  const [bestSellersData, setBestSellersData] = useState([]);
+  const [countData, setCountData] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [productSaleData, setProductSaleData] = useState({
+    dailySales: [],
+    weeklySales: [],
+    monthlySales: [],
+    yearlySales: [],
+  });
+
+  const [saleData, setSaleData] = useState([]);
 
   useEffect(() => {
     // Fetch data from API and update state
     // For demo purposes, we're using static data
-    setRevenueData([
+
+    getSumRevenueAndByCate(setRevenueData);
+    getOrderAndCusCount(setCountData);
+    getCustomers(setCustomers);
+    getBestSeller(setBestSellers);
+    getProductSaleData(setProductSaleData);
+    setSaleData([
       { month: "Jan", revenue: 40000 },
       { month: "Feb", revenue: 30000 },
       { month: "Mar", revenue: 20000 },
@@ -32,106 +74,109 @@ const Dashboard = () => {
       { month: "May", revenue: 18900 },
       { month: "Jun", revenue: 23900 },
     ]);
-    setCategoryRevenueData([
-      { category: "Rings", revenue: 40000 },
-      { category: "Necklaces", revenue: 30000 },
-      { category: "Bracelets", revenue: 20000 },
-      { category: "Earrings", revenue: 27800 },
-    ]);
-    setOrdersData([
-      { key: '1',  customer: 'My Tam', total: 54000 },
-      { key: '2',  customer: 'Nhu', total: 44000 },
-      // Add more orders as needed
-    ]);
-    setCustomerIncomeData([
-      { name: 'Tiep Em', income: 50000 },
-      // Add more customer incomes as needed
-    ]);
-    setBestSellersData([
-      { key: '1', name: 'Tiep Em', totalSales: 60000 },
-      { key: '2', name: 'Hoang Nguyen', totalSales: 55000 },
-      // Add more best sellers as needed
-    ]);
   }, []);
-
-  const columnsOrders = [
-   
+  const totalRevenue = revenueData.totalRevenue || 0;
+  const threshold = 0.02; // Define a threshold for small categories
+  const categoryRevenueData = (revenueData.revenueByCategory || []).reduce(
+    (acc, category) => {
+      if (category.revenue / totalRevenue < threshold) {
+        const otherCategory = acc.find((cat) => cat.name === "Other");
+        if (otherCategory) {
+          otherCategory.value += category.revenue;
+        } else {
+          acc.push({ name: "Other", value: category.revenue });
+        }
+      } else {
+        acc.push({ name: category.categoryName, value: category.revenue });
+      }
+      return acc;
+    },
+    []
+  );
+  const columnsCustomers = [
     {
-      title: 'Customer',
-      dataIndex: 'customer',
-      key: 'customer',
+      title: "Customer Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
-      render: (total) => `$${total.toLocaleString()}`,
+      title: "Loyalty Points",
+      dataIndex: "loyaltyPoints",
+      key: "loyaltyPoints",
+      render: (total) => `${total.toLocaleString()}`,
     },
-   
   ];
 
   const columnsBestSellers = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "firstName",
+      key: "firstName",
+      render: (text, record) => (
+        <div>
+          {text} {record.lastName}
+        </div>
+      ),
     },
     {
-      title: 'Total Sales',
-      dataIndex: 'totalSales',
-      key: 'totalSales',
-      render: (totalSales) => `$${totalSales.toLocaleString()}`,
+      title: "Total Sales",
+      dataIndex: "revenue",
+      key: "revenue",
+      render: (revenue) => `${(revenue || 0).toLocaleString()} VND`,
     },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const sortedCustomers = [...customers]
+    .sort((a, b) => b.loyaltyPoints - a.loyaltyPoints)
+    .slice(0, 3);
 
   return (
     <DashboardContainer>
       <Row gutter={16}>
-        <Col span={6}>
+        <Col span={8}>
           <SummaryCard>
             <Statistic
               title="Total Revenue"
-              value={11893}
+              value={`${(revenueData.totalRevenue || 0).toLocaleString()} VND`}
+              // `${(revenue || 0).toLocaleString()} VND`
               precision={2}
-              valueStyle={{ color: '#3f8600' }}
-              prefix="$"
-              suffix="VND"
+              valueStyle={{ color: "#3f8600" }}
+              // suffix="VND"
             />
           </SummaryCard>
         </Col>
-        <Col span={6}>
+        <Col span={8}>
           <SummaryCard>
             <Statistic
               title="Total Sell Orders"
-              value={1128}
+              value={countData.orderSellCount}
               precision={0}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: "#3f8600" }}
             />
           </SummaryCard>
         </Col>
 
-        <Col span={6}>
+        <Col span={8}>
           <SummaryCard>
             <Statistic
               title="Total Purchase Orders"
-              value={1128}
+              value={countData.orderBuyBackCount}
               precision={0}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: "#3f8600" }}
             />
           </SummaryCard>
         </Col>
-        <Col span={6}>
+        {/* <Col span={6}>
           <SummaryCard>
             <Statistic
               title="Total Customers"
-              value={93}
+              value={countData.customerCount}
               precision={0}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: "#3f8600" }}
             />
           </SummaryCard>
-        </Col>
+        </Col> */}
       </Row>
       <Row gutter={16}>
         <Col span={12}>
@@ -143,48 +188,101 @@ const Dashboard = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) =>
+                    `${name}: ${(percent * 100).toFixed(0)}%`
+                  }
                   outerRadius={100}
                   fill="#8884d8"
-                  dataKey="revenue"
+                  dataKey="value"
                 >
                   {categoryRevenueData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value) => formatCurrency(value)} />
               </PieChart>
             </ResponsiveContainer>
           </SummaryCard>
         </Col>
+
         <Col span={12}>
-          <SummaryCard title="Revenue By Month">
+          <SummaryCard title="Monthly Sales">
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={revenueData}
-                margin={{
-                  top: 5, right: 30, left: 20, bottom: 5,
-                }}
-              >
+              <StyledBarChart data={productSaleData.monthlySales}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
+                <XAxis dataKey="period" />
                 <YAxis />
-                <Tooltip />
-                <Bar dataKey="revenue" fill="#82ca9d" />
-              </BarChart>
+                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Bar dataKey="totalRevenue" fill="#82ca9d" />
+              </StyledBarChart>
             </ResponsiveContainer>
           </SummaryCard>
         </Col>
       </Row>
+      
+      {/* <Row gutter={16}>
+        <Col span={12}>
+          <SummaryCard title="Weekly Sales">
+            <ResponsiveContainer width="100%" height={300}>
+              <StyledBarChart data={productSaleData?.weeklySales}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="period" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="totalRevenue" fill="#82ca9d" />
+              </StyledBarChart>
+            </ResponsiveContainer>
+          </SummaryCard>
+        </Col> */}
+        {/* <Col span={12}>
+         <SummaryCard title="Daily Sales">
+            <ResponsiveContainer width="100%" height={300} >
+              <StyledBarChart data={productSaleData.dailySales}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="period" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="totalRevenue" fill="#82ca9d" />
+              </StyledBarChart>
+            </ResponsiveContainer>
+          </SummaryCard>
+        </Col> */}
+      {/* </Row> */}
+      {/* <Row gutter={16}>
+        <Col span={12}>
+          <SummaryCard title="Yearly Sales">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={productSaleData.yearlySales}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="period" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="totalRevenue" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </SummaryCard>
+        </Col>
+      </Row> */}
       <Row gutter={16}>
         <Col span={12}>
           <SummaryCard title="Loyal Customer">
-            <Table dataSource={ordersData} columns={columnsOrders} pagination={false} />
+            <Table
+              dataSource={sortedCustomers}
+              columns={columnsCustomers}
+              pagination={false}
+            />
           </SummaryCard>
         </Col>
         <Col span={12}>
           <SummaryCard title="Best Sellers">
-            <Table dataSource={bestSellersData} columns={columnsBestSellers} pagination={false} />
+            <Table
+              dataSource={bestSellers}
+              columns={columnsBestSellers}
+              pagination={false}
+            />
           </SummaryCard>
         </Col>
       </Row>

@@ -31,6 +31,12 @@ const columns = [
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
+    filters: [
+      { text: "Processing", value: "Processing" },
+      { text: "Paid", value: "Paid" },
+      { text: "Cancelled", value: "Cancelled" },
+    ],
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => (
       <Tag color={statusColors[status]}>{status.toUpperCase()}</Tag>
     ),

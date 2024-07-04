@@ -16,21 +16,48 @@ const FlexContainer = styled.div`
   align-items: center;
   margin-bottom: 16px;
 `;
-const columns = (showModalForEdit) => [
-  {
-    title: "Category ID",
-    dataIndex: "categoryId",
-    key: "categoryId",
-  },
+const columns = (showModalForEdit, categoryType, category) => [
+  // {
+  //   title: "Category ID",
+  //   dataIndex: "categoryId",
+  //   key: "categoryId",
+  // },
   {
     title: "Category Name",
     dataIndex: "categoryName",
     key: "categoryName",
+    filters: category.map((category) => ({
+      text: `${category.categoryName}`,
+      value: category.categoryName,
+    })),
+    onFilter: (value, record) => record.categoryName === value,
   },
+  {
+    title: "Discount Rate",
+    dataIndex: "discountRate",
+    key: "discountRate",
+    render: (discountRate) => `${discountRate}%`,
+  },
+  {
+    title: "Category Type Name",
+    dataIndex: "categoryTypeName",
+    key: "categoryTypeName",
+    filters: categoryType.map((categoryType) => ({
+      text: `${categoryType.categoryTypeName}`,
+      value: categoryType.categoryTypeName,
+    })),
+    onFilter: (value, record) => record.categoryTypeName === value,
+  },
+
   {
     title: "Status",
     dataIndex: "status",
     key: "status",
+    filters: [
+      { text: "Active", value: "Active" },
+      { text: "Inactive", value: "Inactive" },
+    ],
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => (
       <Tag color={status === "Active" ? "green" : "red"}>{status}</Tag>
     ),
@@ -128,7 +155,7 @@ const CategoryPage = () => {
       </FlexContainer>
 
       <Table
-        columns={columns(showModalForEdit)}
+        columns={columns(showModalForEdit, categoryType, category)}
         dataSource={filteredCategory}
         pagination={{
           pageSizeOptions: ["5", "10", "15"],

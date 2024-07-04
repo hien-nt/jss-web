@@ -21,16 +21,20 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-const columns = (showModalForEdit) => [
-  {
-    title: "Diamond ID",
-    dataIndex: "diamondPriceId",
-    key: "diamondPriceId",
-  },
+const columns = (showModalForEdit, diamondPrices) => [
+  // {
+  //   title: "Diamond ID",
+  //   dataIndex: "diamondPriceId",
+  //   key: "diamondPriceId",
+  // },
   {
     title: "Origin",
     dataIndex: "origin",
     key: "origin",
+    filters: [
+      { text: "Natural", value: "Natural" },
+    ],
+    onFilter: (value, record) => record.origin.indexOf(value) === 0,
   },
   {
     title: "Carat Weight",
@@ -45,16 +49,37 @@ const columns = (showModalForEdit) => [
     title: "Color",
     dataIndex: "color",
     key: "color",
+    filters: [
+      { text: "D", value: "D" },
+      { text: "E", value: "E" },
+      { text: "F", value: "F" },
+      { text: "J", value: "J" },
+    ],
+    onFilter: (value, record) => record.color.indexOf(value) === 0,
   },
   {
     title: "Clarity",
     dataIndex: "clarity",
     key: "clarity",
+    filters: [
+      { text: "IF", value: "IF" },
+      { text: "VVS1", value: "VVS1" },
+      { text: "VVS2", value: "VVS2" },
+      { text: "VS1", value: "VVS1" },
+      { text: "VS2", value: "VVS2" },
+
+    ],
+    onFilter: (value, record) => record.clarity.indexOf(value) === 0,
   },
   {
     title: "Cut",
     dataIndex: "cut",
     key: "cut",
+    filters: [
+      { text: "Excellent", value: "Excellent" },
+    ],
+    onFilter: (value, record) => record.cut.indexOf(value) === 0,
+    
   },
   {
     title: "Sell Price",
@@ -72,6 +97,8 @@ const columns = (showModalForEdit) => [
     title: "Effective Date",
     dataIndex: "effDate",
     key: "effDate",
+    render: (text) => (text ? text.split("T")[0] : "Not Defined"),
+
   },
   {
     title: "Action",
@@ -154,7 +181,7 @@ const DiamondPricePage = () => {
     
 
     <Table
-      columns={columns(showModalForEdit)}
+      columns={columns(showModalForEdit, diamondPrices)}
       dataSource={diamondPrices}
       pagination={{
         pageSizeOptions: ["5", "10", "15"],

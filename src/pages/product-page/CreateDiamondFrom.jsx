@@ -18,7 +18,10 @@ const CreateDiamondForm = ({ onFinish }) => {
         label="Origin"
         rules={[{ required: true, message: "Please input the origin!" }]}
       >
-        <Input />
+        <Select>
+          <Option value="Nature">Nature (tự nhiên)</Option>
+          <Option value="Lab">Lab (nhân tạo)</Option>
+        </Select>
       </Form.Item>
       <Form.Item
         name="caratWeightFrom"

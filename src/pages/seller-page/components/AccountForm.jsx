@@ -44,8 +44,11 @@ const AccountForm = ({
   initialData,
   isEditing,
   counters,
+  customRequest
 }) => {
   const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
+
   const [formType, setFormType] = useState("Create");
 
   useEffect(() => {
@@ -68,6 +71,18 @@ const AccountForm = ({
         role: initialData.role,
         // ...set other fields
       });
+      if (initialData.imageUrl) {
+        setFileList([
+          {
+            uid: "-1",
+            name: "image.jpg",
+            status: "done",
+            url: initialData.imageUrl,
+          },
+        ]);
+      } else {
+        setFileList([]);
+      }
     } else {
       // Reset form initialData if we're creating a new Account
       setFormType("Create");
@@ -75,6 +90,25 @@ const AccountForm = ({
     }
   }, [form, isEditing, initialData, setFormType]);
 
+  const handleUploadChange = ({ file, fileList }, form) => {
+    const { status, response } = file;
+  
+    // Use the Ant Design form API to set the value of the image field
+    if (status === 'done' && response && response.imageUrl) {
+      form.setFieldsValue({ imageUrl: response.imageUrl });
+      message.success(`${file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+      message.error(`${file.name} file upload failed.`);
+    }
+  
+    // Only show the last uploaded file to replace the existing file
+    const newFileList = fileList.slice(-1).map(file => ({
+      ...file,
+      url: file.response ? file.response.imageUrl : file.url,
+    }));
+  
+    setFileList(newFileList);
+  };
   return (
     <Modal
       title={formType}
@@ -89,14 +123,14 @@ const AccountForm = ({
             <Col span={12}>
               <InputFormItem
                 itemName="username"
-                itemLabel="Username"
+                itemLabel="Tài Khoản"
                 rule={usernameRules}
               />
             </Col>
             <Col span={12}>
               <InputFormItem
                 itemName="password"
-                itemLabel="Password"
+                itemLabel="Mật Khẩu"
                 rule={passwordRules}
                 // message="Please fill password!"
               />
@@ -127,7 +161,7 @@ const AccountForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="address"
-              itemLabel="Address"
+              itemLabel="Địa chỉ"
               required="true"
               message="Please fill address!"
             />
@@ -144,7 +178,7 @@ const AccountForm = ({
 
         <PhoneNumberInputItem
           itemName="phone"
-          itemLabel="Phone Number"
+          itemLabel="Số điện thoại"
           required="true"
           message="Please fill Account phone number!"
           validatePhone={true}
@@ -155,7 +189,7 @@ const AccountForm = ({
             <Col span={12}>
               <SelectFormItem
                 itemName="counterId"
-                itemLabel="Counter"
+                itemLabel="Quầy"
                 required="true"
                 message="Please fill counter seller belong to!"
                 placeholder="Select counter for seller"
@@ -167,7 +201,7 @@ const AccountForm = ({
             <Col span={12}>
               <SelectFormItem
                 itemName="role"
-                itemLabel="Role"
+                itemLabel="Vị trí"
                 required="true"
                 message="Please select role for account!"
                 placeholder="Select role for account"
@@ -177,6 +211,41 @@ const AccountForm = ({
               />
             </Col>
           </Row>
+        )}
+         {isEditing && (
+          <Form.Item name="imageUrl" label="Image URL">
+            <Upload
+              name="imageFile"
+              listType="picture-card"
+              fileList={fileList}
+              onChange={(info) => handleUploadChange(info, form)}
+              customRequest={customRequest}
+              accept="image/*"
+            >
+              {fileList.length < 1 && (
+                <Button icon={<UploadOutlined />}>Upload Image</Button>
+              )}
+            </Upload>
+          </Form.Item>
+        )}
+        
+        {!isEditing && (
+          <Form.Item
+            name="imageUrl"
+            label="Image URL"
+            rules={[{ required: true, message: "Please enter the image URL" }]}
+          >
+            <Upload
+              listType="picture"
+              name="imageFile"
+              maxCount={1}
+              onChange={(info) => handleUploadChange(info, form)}
+              customRequest={customRequest}
+              accept="image/*"
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
         )}
       </Form>
     </Modal>

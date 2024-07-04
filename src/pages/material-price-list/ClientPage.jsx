@@ -22,9 +22,13 @@ const ClientPage = () => {
           <TabPane tab="Giá Bạc" key="2">
             <ClientSliverPricePage />
           </TabPane>
-          <TabPane tab="Giá Kim Cương" key="3">
+          <TabPane tab="Giá Kim Cương Tự Nhiên" key="3">
             <Title>Bảng giá kim cương tự nhiên - Excellent Cut</Title>
-            <ClientDiamondPricePage />
+            <ClientDiamondPricePage origin="Natural" />
+          </TabPane>
+          <TabPane tab="Giá Kim Cương Nhân Tạo" key="4">
+            <Title>Bảng giá kim cương nhân tạo - Excellent Cut</Title>
+            <ClientDiamondPricePage origin="Lab"/>
           </TabPane>
         </Tabs>
       </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Tag, Input, Drawer } from "antd";
 import { getAllProduct } from "../../services/Product/ProductService";
+import { FileAPI } from "../../axios/FileApi";
 import CreateProductForm from "./CreateProductForm"; // Adjust the path according to your file structure
 import styled from "styled-components";
+import { getCounters } from "../../services/Counter/CounterServices";
 
 const FlexContainer = styled.div`
   display: flex;
@@ -23,7 +25,7 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-const columns = [
+const columns = (counters) => [
   {
     title: "Product ID",
     dataIndex: "productId",
@@ -42,31 +44,41 @@ const columns = [
     ),
   },
   {
-    title: "Product Name",
+    title: "Tên sản phẩm",
     dataIndex: "productName",
     key: "productName",
   },
   {
-    title: "Counter Name",
+    title: "Quầy",
     dataIndex: "counterName",
     key: "counterName",
+    filters: counters.map((counter) => ({
+      text: `${counter.counterName}`,
+      value: counter.counterName,
+    })),
+    onFilter: (value, record) => record.counterName === value,
   },
   {
-    title: "Sell Price",
+    title: "Giá bán",
     dataIndex: "productPrice",
     key: "productPrice",
     render: (price) => formatCurrency(price), // Use formatCurrency to render price
   },
   {
-    title: "Buy Price",
+    title: "Giá mua",
     dataIndex: "buyBackPrice",
     key: "buyBackPrice",
     render: (price) => formatCurrency(price), // Use formatCurrency to render buy back price
   },
   {
-    title: "Status",
+    title: "Trạng thái",
     dataIndex: "status",
     key: "status",
+    filters: [
+      { text: "Còn hàng", value: "Còn hàng" },
+      { text: "Hết hàng", value: "Hết hàng" },
+    ],
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => (
       <Tag color={statusColors[status]}>{status.toUpperCase()}</Tag>
     ),
@@ -77,13 +89,29 @@ const ProductPage = () => {
   const [product, setProduct] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [counters, setCounters]= useState([]);
 
-  const filteredProduct = product.filter((product) =>
-    product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  const customRequest = async (options) => {
+    const { onSuccess, onError, file } = options;
+
+    try {
+      const response = await FileAPI.uploadFile(file);
+      onSuccess(response.data, file);
+    } catch (error) {
+      console.error("Upload error:", error);
+      onError(error);
+    }
+  };
+
+  const filteredProduct = product.filter(
+    (product) =>
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.productId.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
     getAllProduct(setProduct);
+    getCounters(setCounters);
   }, []);
 
   const showDrawerForNew = () => {
@@ -103,7 +131,7 @@ const ProductPage = () => {
     <>
       <FlexContainer>
         <Input
-          placeholder="Search by product name"
+          placeholder="Search by product name or product id"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ width: 200 }}
@@ -114,7 +142,7 @@ const ProductPage = () => {
         </Button>
       </FlexContainer>
       <Table
-        columns={columns}
+        columns={columns(counters)}
         dataSource={filteredProduct}
         pagination={{
           pageSizeOptions: ["5", "7", "10"],
@@ -129,7 +157,8 @@ const ProductPage = () => {
         visible={drawerVisible}
         bodyStyle={{ paddingBottom: 80 }}
       >
-        <CreateProductForm onFinish={handleFormSubmit} />
+        <CreateProductForm onFinish={handleFormSubmit} customRequest={customRequest}
+ />
       </Drawer>
     </>
   );

@@ -31,8 +31,11 @@ const columns = [
   },
   {
     title: "Nhân viên",
-    dataIndex: "sellerLastName",
-    key: "sellerLastName",
+    dataIndex: "sellerFirstName",
+    key: "sellerFirstName",
+    render: (text, record) => (
+      <div>{text} {record.sellerLastName}</div>
+    ),
   },
   {
     title: "Trạng thái",
@@ -51,17 +54,17 @@ const columns = [
         </Link>
       ),
   },
-  {
-    title: "Xem hóa đơn",
-    key: "viewInvoice",
-    render: (_, record) => (
-      <Space size="middle">
-        <Button onClick={() => alert(`Viewing invoice for ${record.id}`)}>
-          Xem hóa đơn
-        </Button>
-      </Space>
-    ),
-  },
+  // {
+  //   title: "Xem hóa đơn",
+  //   key: "viewInvoice",
+  //   render: (_, record) => (
+  //     <Space size="middle">
+  //       <Button onClick={() => alert(`Viewing invoice for ${record.id}`)}>
+  //         Xem hóa đơn
+  //       </Button>
+  //     </Space>
+  //   ),
+  // },
 ];
 
 

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table, Tag, Button, Input, Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { getMaterials, createMaterial } from "../../services/Material/MaterialService";
+import {
+  getMaterials,
+  createMaterial,
+} from "../../services/Material/MaterialService";
 import styled from "styled-components";
 import MateriaLForm from "./components/MaterialForm";
 const FlexContainer = styled.div`
@@ -10,7 +13,7 @@ const FlexContainer = styled.div`
   align-items: center;
   margin-bottom: 16px;
 `;
-const columns = () => [
+const columns = (materialTypes) => [
   // {
   //   title: "Material Type ID",
   //   dataIndex: "materialTypeId",
@@ -20,18 +23,27 @@ const columns = () => [
     title: "Material Name",
     dataIndex: "materialName",
     key: "materialName",
+    // filters: materials((material) => ({
+    //   text: `${material.materialName}`,
+    //   value: material.materialName,
+    // })),
+    // onFilter: (value, record) => record.materialName === value,
   },
   {
     title: "Material Type Name",
     dataIndex: "materialTypeName",
     key: "materialTypeName",
+    filters: [
+      { text: "Vàng", value: "Vàng" },
+      { text: "Bạc", value: "Bạc" },
+    ],
+    onFilter: (value, record) => record.materialTypeName.indexOf(value) === 0,
   },
   // {
   //   title: "Material ID",
   //   dataIndex: "materialId",
   //   key: "materialId",
   // },
-  
 ];
 
 const MaterialPage = () => {
@@ -91,8 +103,8 @@ const MaterialPage = () => {
   useEffect(() => {
     getMaterials(setMaterials);
     setMaterialTypes([
-      { materialTypeId: 1, materialTypeName: "Vàng"},
-      { materialTypeId: 2, materialTypeName: "Bạc"},
+      { materialTypeId: 1, materialTypeName: "Vàng" },
+      { materialTypeId: 2, materialTypeName: "Bạc" },
     ]);
   }, []);
 
@@ -111,7 +123,7 @@ const MaterialPage = () => {
       </FlexContainer>
 
       <Table
-        columns={columns(showModalForEdit)}
+        columns={columns(showModalForEdit, materialTypes)}
         dataSource={filteredMaterial}
         pagination={{
           pageSizeOptions: ["5", "10", "15"],

@@ -9,6 +9,11 @@ import {
   ContainerOutlined,
   FileSyncOutlined,
   BookOutlined,
+  UserOutlined,
+  UsergroupAddOutlined,
+  UnorderedListOutlined ,
+  SketchOutlined 
+  
 } from "@ant-design/icons";
 import { Button, Layout } from "antd";
 import { useState, useEffect } from "react";
@@ -38,14 +43,14 @@ function Sidebar({ chooseHeader }) {
   const items =
     role === "Manager"
       ? [
-          getItem("Dashboard", "/", <LineChartOutlined />),
-          getItem("Counter", "/counters", <GoldOutlined />),
-          getItem("Account", "/accounts", <GoldOutlined />),
-          getItem("Customer", "/customers", <GoldOutlined />),
+          getItem("Thống Kê", "/", <LineChartOutlined />),
+          getItem("Quầy Hàng", "/counters", <BankOutlined />),
+          getItem("Tài Khoản", "/accounts",  <UserOutlined />),
+          getItem("Khách Hàng", "/customers", <UsergroupAddOutlined />),
 
-          getItem("Approval Order", "/approval-order", <BookOutlined />),
-          getItem("Product", "/products", <BankOutlined />),
-          getItem("Category", "sub2", <BranchesOutlined />, [
+          getItem("Đơn Khuyến Mãi", "/approval-order", <BookOutlined />),
+          getItem("Sản Phẩm", "/products", <SketchOutlined />),
+          getItem("Phân loại", "sub2", <BranchesOutlined />, [
             getItem("Category Type", "/category-types"),
             getItem("Category", "/category"),
           ]),
@@ -54,7 +59,7 @@ function Sidebar({ chooseHeader }) {
         
 
 
-          getItem("Price List", "sub", <BranchesOutlined />, [
+          getItem("Price List", "sub", <UnorderedListOutlined />, [
             getItem("Gold Price", "/gold-price"),
             getItem("Sliver Price", "/sliver-price"),
             getItem("Diamond Price", "/diamond-price"),
@@ -68,9 +73,9 @@ function Sidebar({ chooseHeader }) {
         ]
       : [
           // getItem("Dashboard", "/",  <LineChartOutlined />),
-          getItem("Sell Order", "/sell-order", <ContainerOutlined />),
-          getItem("Purchase Order", "/purchase-order", <FileSyncOutlined />),
-          getItem("Sell Promotion Order ", "/approved-order", <BookOutlined />),
+          getItem("Đơn Bán", "/sell-order", <ContainerOutlined />),
+          getItem("Đơn Mua", "/purchase-order", <FileSyncOutlined />),
+          getItem("Đơn khuyến mãi", "/approved-order", <BookOutlined />),
           // getItem("Breeding", "/breeding", <HomeOutlined />),
         ];
 

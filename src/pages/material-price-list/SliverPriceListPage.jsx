@@ -13,16 +13,21 @@ const FlexContainer = styled.div`
   align-items: center;
   margin-bottom: 16px;
 `;
-const columns = (showModalForEdit) => [
-  {
-    title: "Material ID",
-    dataIndex: "materialId",
-    key: "materialId",
-  },
+const columns = (showModalForEdit, materialsPrice) => [
+  // {
+  //   title: "Material ID",
+  //   dataIndex: "materialId",
+  //   key: "materialId",
+  // },
   {
     title: "Material Name",
     dataIndex: "materialName",
     key: "materialName",
+     filters: materialsPrice.map((materialsPrice) => ({
+      text: `${materialsPrice.materialName}`,
+      value: materialsPrice.materialName,
+    })),
+    onFilter: (value, record) => record.materialName === value,
   },
   {
     title: "Buy Price",
@@ -48,6 +53,8 @@ const columns = (showModalForEdit) => [
     title: "Effective Date",
     dataIndex: "effDate",
     key: "effDate",
+    render: (text) => (text ? text.split("T")[0] : "Not Defined"),
+
   },
   {
     title: "Action",
@@ -145,7 +152,7 @@ const SliverPricePage = ({ materialTypeId }) => {
       </FlexContainer>
 
       <Table
-        columns={columns(showModalForEdit)}
+        columns={columns(showModalForEdit, materialsPrice)}
         dataSource={filteredMaterialPrice}
         pagination={{
           pageSizeOptions: ["5", "10", "15"],

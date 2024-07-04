@@ -17,32 +17,31 @@ const FlexContainer = styled.div`
   margin-bottom: 16px;
 `;
 
-const columns = (showModalForEdit) => [
+const columns = (showModalForEdit, sellers) => [
+  // {
+  //   title: "Counter ID",
+  //   dataIndex: "counterId",
+  //   key: "counterId",
+  // },
   {
-    title: "Counter ID",
-    dataIndex: "counterId",
-    key: "counterId",
-  },
-  {
-    title: "Counter Name",
+    title: "Tên Quầy",
     dataIndex: "counterName",
     key: "counterName",
   },
   {
-    title: "Account ID",
+    title: "Phụ Trách",
     dataIndex: "accountId",
     key: "accountId",
+    filters: sellers.map((seller) => ({
+      text: `${seller.firstName} ${seller.lastName}`,
+      value: seller.accountId,
+    })),
+    onFilter: (value, record) => record.accountId === value,
+    render: (text, record) => (
+      <div>{record.firstName} {record.lastName}</div>
+    ),
   },
-  {
-    title: "First Name",
-    dataIndex: "firstName",
-    key: "firstName",
-  },
-  {
-    title: "Last Name",
-    dataIndex: "lastName",
-    key: "lastName",
-  },
+ 
   {
     title: "Action",
     key: "action",
@@ -131,7 +130,7 @@ const CounterPage = () => {
       </FlexContainer>
 
       <Table
-        columns={columns(showModalForEdit)}
+        columns={columns(showModalForEdit, sellers)}
         dataSource={filteredCounters}
         pagination={{
           pageSizeOptions: ["5", "10", "15"],

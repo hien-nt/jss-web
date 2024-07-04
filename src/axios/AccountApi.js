@@ -4,6 +4,7 @@ export const AccountApi = {
   login: (username, password) => {
     return axiosClient.post("/Accounts/login", username, password);
   },
+  
   createAccount: (payload) => {
     return axiosClient.post("/Accounts/signup", payload);
   },

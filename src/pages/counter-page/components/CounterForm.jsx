@@ -62,7 +62,7 @@ const CounterForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="counterName"
-              itemLabel="Counter Name"
+              itemLabel="Tên Quầy"
               required="true"
               message="Please fill counter name!"
             />
@@ -71,7 +71,7 @@ const CounterForm = ({
 
         <Form.Item
           name="accountId"
-          label="Seller"
+          label="Phụ Trách"
           rules={[
             { required: true, message: "Please select a seller for counter!" },
           ]}

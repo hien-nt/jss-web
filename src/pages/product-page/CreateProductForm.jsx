@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Select, Button, Drawer, Row, Col, message } from "antd";
+import { Form, Input, Select, Button, Drawer, Row, Col, message, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { CategoryApi } from "../../axios/CategoryApi";
 import { MaterialApi } from "../../axios/MaterialApi";
 import { DiamondApi } from "../../axios/DiamondApi";
@@ -8,8 +9,9 @@ import CreateDiamondForm from "./CreateDiamondFrom";
 
 const { Option } = Select;
 
-const CreateProductForm = ({ onFinish }) => {
+const CreateProductForm = ({ onFinish, customRequest }) => {
   const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [diamonds, setDiamonds] = useState([]);
@@ -90,7 +92,7 @@ const CreateProductForm = ({ onFinish }) => {
       const newDiamond = response.data;
       setDiamonds([...diamonds, newDiamond]);
       form.setFieldsValue({
-        diamonds: [...(form.getFieldValue("diamonds") || []), newDiamond.diamondCode],
+        diamonds: [...(form.getFieldValue("diamonds") || []), newDiamond.diamondName],
       });
       setDiamondDrawerVisible(false);
     } catch (error) {
@@ -110,11 +112,32 @@ const CreateProductForm = ({ onFinish }) => {
       await ProductApi.createProduct(payload);
       console.log("Product created successfully:", payload);
       message.success("Product created successfully")
+      setFileList([]);
       form.resetFields();
       onFinish(); // Close the drawer after successful form submission
     } catch (error) {
       console.error("Failed to create product:", error);
     }
+  };
+
+  const handleUploadChange = ({ file, fileList }, form) => {
+    const { status, response } = file;
+  
+    // Use the Ant Design form API to set the value of the image field
+    if (status === 'done' && response && response.imageUrl) {
+      form.setFieldsValue({ img: response.imageUrl });
+      message.success(`${file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+      message.error(`${file.name} file upload failed.`);
+    }
+  
+    // Only show the last uploaded file to replace the existing file
+    const newFileList = fileList.slice(-1).map(file => ({
+      ...file,
+      url: file.response ? file.response.imageUrl : file.url,
+    }));
+  
+    setFileList(newFileList);
   };
 
   return (
@@ -136,9 +159,20 @@ const CreateProductForm = ({ onFinish }) => {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item name="img" label="Image URL" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
+        <Form.Item name="img" label="Image URL">
+            <Upload
+              name="imageFile"
+              listType="picture-card"
+              fileList={fileList}
+              onChange={(info) => handleUploadChange(info, form)}
+              customRequest={customRequest}
+              accept="image/*"
+            >
+              {fileList.length < 1 && (
+                <Button icon={<UploadOutlined />}>Upload Image</Button>
+              )}
+            </Upload>
+          </Form.Item>
         <Form.Item
           name="counterId"
           label="Counter ID"

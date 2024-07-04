@@ -3,8 +3,10 @@ import { Space, Table, Button, Tag, ConfigProvider } from "antd";
 import { Link } from "react-router-dom";
 import { getApprovalSellOrder } from "../../services/SellOrder/SellOrderService";
 const statusColors = {
-  Paid: "#ff7875",
-  Processing: "#69b1ff", // Darker blue
+  Processing: "#ff7875",
+  Paid: "#ffa940", // Darker blue
+  Approval:"#36cfc9",
+  Approved:"#4096ff",
   Delivered: "#95de64",
   Cancelled: "#595959", // Very light gray or alternative color for visual distinction
 };
@@ -49,17 +51,17 @@ const columns = [
         </Link>
       ),
   },
-  {
-    title: "Xem hóa đơn",
-    key: "viewInvoice",
-    render: (_, record) => (
-      <Space size="middle">
-        <Button onClick={() => alert(`Viewing invoice for ${record.id}`)}>
-          Xem hóa đơn
-        </Button>
-      </Space>
-    ),
-  },
+  // {
+  //   title: "Xem hóa đơn",
+  //   key: "viewInvoice",
+  //   render: (_, record) => (
+  //     <Space size="middle">
+  //       <Button onClick={() => alert(`Viewing invoice for ${record.id}`)}>
+  //         Xem hóa đơn
+  //       </Button>
+  //     </Space>
+  //   ),
+  // },
 ];
 
 const ApprovalOrderPage = () => {

@@ -139,8 +139,8 @@ const SellerPage = () => {
     const payload = {
       username: values.username,
       password: values.password,
-      // firstName: values.firstName,
-      // lastName: values.lastName,
+      firstName: values.firstName,
+      lastName: values.lastName,
       imageUrl: values.imageUrl,
       phone: values.phone,
       email: values.email,
@@ -153,6 +153,8 @@ const SellerPage = () => {
       const accountId = currentAccount.accountId;
       const updatePayload = {
         accountId: accountId,
+        firstName: values.firstName,
+        lastName: values.lastName,
         phone: values.phone,
         email: values.email,
         address: values.address,

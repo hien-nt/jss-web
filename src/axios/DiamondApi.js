@@ -15,5 +15,7 @@ export const DiamondApi = {
     return axiosClient.put(`/DiamondPrices/${diamondPriceId}`, payload);
   },
 
-
+  checkDiamondPrice: (diamondData) => {
+    return axiosClient.post(`/Diamonds/check-price`, diamondData);
+  },
 };

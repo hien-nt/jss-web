@@ -56,7 +56,7 @@ const ClientSliverPricePage = () => {
 
   useEffect(() => {
     getMaterialPrice(2, setMaterialsPrice);
-  });
+  },[]);
 
   const filteredMaterialPrice = materialsPrice.filter((materialPrice) =>
     materialPrice.materialName.toLowerCase().includes(searchTerm.toLowerCase())

@@ -13,7 +13,10 @@ export const getDiamondPrices = async (setDiamondPrices) => {
       setDiamondPrices([]); // Default to an empty array if the data is not as expected
     }
   } catch (error) {
-    console.error("Failed to fetch diamond data:", error.response?.data || error.message);
+    console.error(
+      "Failed to fetch diamond data:",
+      error.response?.data || error.message
+    );
   }
 };
 
@@ -32,5 +35,15 @@ export const updateDiamondPrice = async (
   } catch (error) {
     console.error("Failed to update price:", error.response.data);
     message.error(`Failed to update price: ${error.response.data}`);
+  }
+};
+
+export const checkDiamondPrice = async (diamondData) => {
+  try {
+    const response = await DiamondApi.checkDiamondPrice(diamondData);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to check price:", error.response.data);
+
   }
 };

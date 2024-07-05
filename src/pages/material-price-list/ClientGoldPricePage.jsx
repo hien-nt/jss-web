@@ -56,7 +56,7 @@ const ClientGoldPricePage = () => {
 
   useEffect(() => {
     getMaterialPrice(1, setMaterialsPrice);
-  });
+  },[]);
 
   const filteredMaterialPrice = materialsPrice.filter((materialPrice) =>
     materialPrice.materialName.toLowerCase().includes(searchTerm.toLowerCase())

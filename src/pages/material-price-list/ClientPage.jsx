@@ -24,7 +24,7 @@ const ClientPage = () => {
           </TabPane>
           <TabPane tab="Giá Kim Cương Tự Nhiên" key="3">
             <Title>Bảng giá kim cương tự nhiên - Excellent Cut</Title>
-            <ClientDiamondPricePage origin="Natural" />
+            <ClientDiamondPricePage origin="Nature" />
           </TabPane>
           <TabPane tab="Giá Kim Cương Nhân Tạo" key="4">
             <Title>Bảng giá kim cương nhân tạo - Excellent Cut</Title>

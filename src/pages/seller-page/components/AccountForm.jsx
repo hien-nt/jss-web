@@ -62,8 +62,8 @@ const AccountForm = ({
         username: initialData.username,
         password: initialData.password,
         email: initialData.email,
-        // firstName: initialData.firstName,
-        // lastName: initialData.lastName,
+        firstName: initialData.firstName,
+        lastName: initialData.lastName,
         phone: initialData.phone,
         imageUrl: initialData.imageUrl,
         address: initialData.address,
@@ -138,11 +138,11 @@ const AccountForm = ({
           </Row>
         )}
 
-        {/* <Row gutter={16}>
+        <Row gutter={16}>
           <Col span={12}>
             <InputFormItem
               itemName="firstName"
-              itemLabel="First Name"
+              itemLabel="Họ"
               required="true"
               message="Please fill first name!"
             />
@@ -150,12 +150,12 @@ const AccountForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="lastName"
-              itemLabel="Last Name"
+              itemLabel="Tên"
               required="true"
               message="Please fill last name!"
             />
           </Col>
-        </Row> */}
+        </Row>
 
         <Row gutter={16}>
           <Col span={12}>

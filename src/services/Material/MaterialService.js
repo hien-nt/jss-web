@@ -44,7 +44,6 @@ export const getMaterialPrice = async (materialTypeId, setMaterialsPrice) => {
 export const createMaterial = async (
   payload,
   setIsModalVisible,
-  materialTypeId,
   setMaterials
 ) => {
   console.log("payload ne: " + JSON.stringify(payload));

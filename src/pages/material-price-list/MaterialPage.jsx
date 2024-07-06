@@ -90,7 +90,7 @@ const MaterialPage = () => {
 
       // await updatematerial(materialId, updatePayload, setIsModalVisible, setmaterial);
     } else {
-      await createMaterial(payload, setIsModalVisible, setMaterials);
+      createMaterial(payload, setIsModalVisible, setMaterials);
     }
   };
 

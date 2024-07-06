@@ -219,7 +219,7 @@ const BuyBackOrderDetailPage = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Text strong>{item.productName}</Text>
+                   <Text strong>{item.productName || item.buyBackProductName}</Text>
                   </Col>
                   <Col
                     span={6}

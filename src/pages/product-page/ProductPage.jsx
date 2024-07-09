@@ -5,7 +5,8 @@ import { FileAPI } from "../../axios/FileApi";
 import CreateProductForm from "./CreateProductForm"; // Adjust the path according to your file structure
 import styled from "styled-components";
 import { getCounters } from "../../services/Counter/CounterServices";
-
+import UpdateProductForm from "./UpdateProductForm";
+import { Link } from "react-router-dom";
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -25,7 +26,7 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-const columns = (counters) => [
+const columns = (counters, onEdit) => [
   {
     title: "Product ID",
     dataIndex: "productId",
@@ -83,6 +84,25 @@ const columns = (counters) => [
       <Tag color={statusColors[status]}>{status.toUpperCase()}</Tag>
     ),
   },
+  {
+    title: "Chi tiết",
+    key: "chi tiết",
+      render: (text, record) => (
+        <Link to={`/product/detail/${record.productId}`}>
+         Chi tiết sản phẩm
+        </Link>
+      ),
+  },
+  {
+    title: "Actions",
+    key: "actions",
+    render: (_, record) => (
+      <Button onClick={() => onEdit(record.productId)} type="link">
+        Edit
+      </Button>
+    ),
+  },
+
 ];
 
 const ProductPage = () => {
@@ -90,7 +110,8 @@ const ProductPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [counters, setCounters]= useState([]);
-
+  const [updateDrawerVisible, setUpdateDrawerVisible] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const customRequest = async (options) => {
     const { onSuccess, onError, file } = options;
 
@@ -127,6 +148,14 @@ const ProductPage = () => {
     getAllProduct(setProduct); // Refresh the product list after adding a new product
   };
 
+  const handleUpdateDrawerClose = () => {
+    setUpdateDrawerVisible(false);
+  };
+  const handleEditProduct = (productId) => {
+    setSelectedProductId(productId);
+    setUpdateDrawerVisible(true);
+  };
+
   return (
     <>
       <FlexContainer>
@@ -142,7 +171,7 @@ const ProductPage = () => {
         </Button>
       </FlexContainer>
       <Table
-        columns={columns(counters)}
+        columns={columns(counters, handleEditProduct)}
         dataSource={filteredProduct}
         pagination={{
           pageSizeOptions: ["5", "7", "10"],
@@ -159,6 +188,21 @@ const ProductPage = () => {
       >
         <CreateProductForm onFinish={handleFormSubmit} customRequest={customRequest}
  />
+      </Drawer>
+
+      <Drawer
+        title="Update Product"
+        width={720}
+        onClose={handleUpdateDrawerClose}
+        visible={updateDrawerVisible}
+        bodyStyle={{ paddingBottom: 80 }}
+      >
+        <UpdateProductForm
+          productId={selectedProductId}
+          onClose={handleUpdateDrawerClose}
+          onUpdate={handleFormSubmit}
+          customRequest={customRequest}
+        />
       </Drawer>
     </>
   );

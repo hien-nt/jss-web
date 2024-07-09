@@ -31,6 +31,7 @@ import ClientGoldPricePage from "./pages/material-price-list/ClientGoldPricePage
 import ClientSliverPricePage from "./pages/material-price-list/ClientSliverPrice";
 import ClientPage from "./pages/material-price-list/ClientPage";
 import Dashboard from "./pages/dashboard/Dashboard";
+import ProductDetailPage from "./pages/product-page/ProductDetailPage";
 
 function App() {
   const DashboardRoute = () => {
@@ -105,6 +106,15 @@ function App() {
           <Route
             path="/promotion-sell-order"
             element={<PromotionSellOrderPage />}
+          />
+
+<Route
+            path="/product/detail/:productId"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <ProductDetailPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route

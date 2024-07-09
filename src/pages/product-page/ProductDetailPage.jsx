@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ProductApi } from "../../axios/ProductApi";
-import { Card, Row, Col, Image, Typography, Divider, Tag, Space, Button } from "antd";
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import {
+  Card,
+  Row,
+  Col,
+  Image,
+  Typography,
+  Divider,
+  Tag,
+  Space,
+  Button,
+} from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
@@ -39,6 +49,8 @@ const ProductDetailPage = () => {
     materialName,
     materialWeight,
     categoryName,
+    materialCost,
+    diamondCost,
     productMaterialCost,
     productDiamondCost,
     productionCost,
@@ -46,19 +58,32 @@ const ProductDetailPage = () => {
     buyBackPrice,
     discountRate,
     priceRate,
-    status
+    status,
   } = productData;
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
   };
 
   return (
-    <Card style={{ width: '80%', margin: 'auto', marginTop: '20px', padding: '20px' }}>
+    <Card
+      style={{
+        width: "80%",
+        margin: "auto",
+        marginTop: "20px",
+        padding: "20px",
+      }}
+    >
       <Row gutter={32}>
         <Col span={10}>
-          <Image src={img} alt={productName} style={{ width: '100%', marginBottom: '20px' }} />
-         
+          <Image
+            src={img}
+            alt={productName}
+            style={{ width: "100%", marginBottom: "20px" }}
+          />
         </Col>
         <Col span={14}>
           <Title level={2}>{productName}</Title>
@@ -69,32 +94,94 @@ const ProductDetailPage = () => {
           <Divider />
           <Row gutter={16}>
             <Col span={12}>
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: "20px" }}>
                 <Title level={4}>Chi tiết sản phẩm</Title>
-                <Text><strong>Mã sản phẩm:</strong> {productId}</Text><br />
-                <Text><strong>Kích thước:</strong> {size}</Text><br />
-                <Text><strong>Vật liệu:</strong> {materialName} ({materialWeight} gram)</Text><br />
-                <Text><strong>Danh mục:</strong> {categoryName}</Text><br />
+                <Text>
+                  <strong>Mã sản phẩm:</strong> {productId}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Kích thước:</strong> {size}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Vật liệu:</strong> {materialName} ({materialWeight}{" "}
+                  gram)
+                </Text>
+                <br />
+                <Text>
+                  <strong>Danh mục:</strong> {categoryName}
+                </Text>
+                <br />
               </div>
             </Col>
             <Col span={12}>
-              <div style={{ marginBottom: '20px' }}>
-                <Title level={4}>Chi phí</Title>
-                <Text><strong>Chi phí vật liệu:</strong> {formatCurrency(productMaterialCost)}</Text><br />
-                <Text><strong>Chi phí kim cương:</strong> {formatCurrency(productDiamondCost)}</Text><br />
-                <Text><strong>Chi phí sản xuất:</strong> {formatCurrency(productionCost)}</Text><br />
-                <Text><strong>Tỉ lệ giảm giá:</strong> {discountRate}%</Text><br />
-                <Text><strong>Tỉ lệ áp giá:</strong> {priceRate}%</Text><br />
+              <div style={{ marginBottom: "20px" }}>
+                <Title level={4}>Chi phí phụ</Title>
+                <Text>
+                  <strong>Chi phí vật liệu phụ:</strong>{" "}
+                  {formatCurrency(materialCost)}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Chi phí kim cương phụ:</strong>{" "}
+                  {formatCurrency(diamondCost)}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Chi phí sản xuất:</strong>{" "}
+                  {formatCurrency(productionCost)}
+                </Text>
+                <br />
               </div>
             </Col>
           </Row>
           <Divider />
-          <div style={{ marginBottom: '20px' }}>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <div style={{ marginBottom: "20px" }}>
+                <Title level={4}>Chi phí chính</Title>
+                <Text>
+                  <strong>Chi phí vật liệu:</strong>{" "}
+                  {formatCurrency(productMaterialCost)}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Chi phí kim cương:</strong>{" "}
+                  {formatCurrency(productDiamondCost)}
+                </Text>
+                <br />
+              </div>
+            </Col>
+            <Col span={12}>
+              <div style={{ marginBottom: "20px" }}>
+                <Title level={4}>Giá cả</Title>
+                <Text>
+                  <strong>Tỉ lệ giảm giá:</strong> {discountRate}%
+                </Text>
+                <br />
+                <Text>
+                  <strong>Tỉ lệ áp giá:</strong> {priceRate}%
+                </Text>
+                <br />
+                <Text>
+                  <strong>Giá bán:</strong> {formatCurrency(productPrice)}
+                </Text>
+                <br />
+                <Text>
+                  <strong>Giá mua lại:</strong> {formatCurrency(buyBackPrice)}
+                </Text>
+                <br />
+              </div>
+            </Col>
+          </Row>
+
+          {/* <div style={{ marginBottom: '20px' }}>
             <Title level={4}>Giá cả</Title>
             <Text><strong>Giá bán:</strong> {formatCurrency(productPrice)}</Text><br />
             <Text><strong>Giá mua lại:</strong> {formatCurrency(buyBackPrice)}</Text><br />
-          </div>
-         
+          </div> */}
         </Col>
       </Row>
     </Card>

@@ -62,8 +62,8 @@ export const AuthProvider = ({ children }) => {
       );
       const { token, account, exexpiresIn } = response.data;
       console.log("account ne: " + JSON.stringify(account));
-      if (account.role === "Staff") {
-        message.error("Staff cannot access this site");
+      if (account.role === "Seller") {
+        message.error("Seller cannot access this site");
         setLoading(false); // Stop loading on error
       } else {
         setUser({ ...account, token, exexpiresIn });
@@ -79,8 +79,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // localStorage.clear();
-    sessionStorage.clear();
+    localStorage.clear();
+    // sessionStorage.clear();
     setUser(null);
     navigate("/login", { replace: true });
   };

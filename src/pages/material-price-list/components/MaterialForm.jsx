@@ -58,7 +58,7 @@ const MaterialForm = ({
 
         <Form.Item
           name="materialTypeId"
-          label="Material Type"
+          label="Loại chất liệu"
           rules={[
             { required: true, message: "Please select a material type!" },
           ]}
@@ -79,7 +79,7 @@ const MaterialForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="materialName"
-              itemLabel="material Name"
+              itemLabel="Tên chất liệu"
               required="true"
               message="Please fill material name!"
             />
@@ -88,7 +88,7 @@ const MaterialForm = ({
 
         <Form.Item
           name="buyprice"
-          label="Buy price for this material"
+          label="Giá mua của chất liệu này (VND)"
           rules={[{ required: true, message: "Please input a buy price!" }]}
         >
           <InputNumber min={0} />
@@ -96,7 +96,7 @@ const MaterialForm = ({
 
         <Form.Item
           name="sellprice"
-          label="Sell price for this material"
+          label="Giá bán của chất liệu này (VND)"
           rules={[{ required: true, message: "Please input a sell price!" }]}
         >
           <InputNumber min={0} />

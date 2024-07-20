@@ -58,7 +58,7 @@ const CategoryForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="categoryName"
-              itemLabel="Category Name"
+              itemLabel="Loại sản phẩm"
               required="true"
               message="Please fill category name!"
             />
@@ -67,7 +67,7 @@ const CategoryForm = ({
 
         <Form.Item
           name="discountRate"
-          label="Discount rate for this category"
+          label="Discount cho loại sản phẩm này (%)"
           rules={[{ required: true, message: "Please input a discount rate!" }]}
         >
           <InputNumber min={0} />
@@ -75,7 +75,7 @@ const CategoryForm = ({
 
         <Form.Item
           name="categoryTypeId"
-          label="Category Type"
+          label="Phân loại"
           rules={[
             { required: true, message: "Please select a category type!" },
           ]}

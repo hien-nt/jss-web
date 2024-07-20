@@ -64,7 +64,7 @@ const columns = (showModalForEdit) => [
     onFilter: (value, record) => record.role.indexOf(value) === 0,
   },
   {
-    title: "Tráng thái",
+    title: "Trạng thái",
     dataIndex: "status",
     key: "status",
     filters: [
@@ -98,7 +98,7 @@ const columns = (showModalForEdit) => [
   },
 ];
 
-const SellerPage = () => {
+const AccountPage = () => {
   const [sellers, setSellers] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [counters, setCounters] = useState([]);
@@ -221,4 +221,4 @@ const SellerPage = () => {
   );
 };
 
-export default SellerPage;
+export default AccountPage;

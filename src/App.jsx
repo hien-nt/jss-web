@@ -21,7 +21,7 @@ import ProductPage from "./pages/product-page/ProductPage";
 import SliverPricePage from "./pages/material-price-list/SliverPriceListPage";
 import DiamondPricePage from "./pages/material-price-list/DiamondPriceListPage";
 import CounterPage from "./pages/counter-page/CounterPage";
-import SellerPage from "./pages/seller-page/SellersPage";
+// import SellerPage from "./pages/seller-page/AccountPage";
 import CustomerPage from "./pages/customer-page/CustomerPage";
 import CategoryTypePage from "./pages/category/CategoryTypePage";
 import CategoryPage from "./pages/category/CategoryPage";
@@ -32,8 +32,22 @@ import ClientSliverPricePage from "./pages/material-price-list/ClientSliverPrice
 import ClientPage from "./pages/material-price-list/ClientPage";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProductDetailPage from "./pages/product-page/ProductDetailPage";
-
+import AccountPage from "./pages/account-page/AccountPage";
+import Profile from "./pages/profile-page/Profile";
 function App() {
+  const ProductRoute = () => {
+    const { user } = useAuth();
+    switch (user?.role) {
+      case "Cashier":
+        return <OrderPage />;
+      case "Manager":
+        return <Unauthorized />;
+      default:
+        // Redirect or show an unauthorized message for users with no role or unrecognized roles
+        return <Unauthorized />;
+    }
+  };
+
   const DashboardRoute = () => {
     const { user } = useAuth();
     switch (user?.role) {
@@ -47,11 +61,12 @@ function App() {
     }
   };
   const LoginRoute = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     const messageShownRef = useRef(false);
 
     useEffect(() => {
+      // logout()
       // Check if user exists and the message has not yet been shown
       if (user && !messageShownRef.current) {
         message.error("User already logged in, cannot access the login page.");
@@ -70,8 +85,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
         <Route path="/client-pricelist" element={<ClientPage />} />
-
-
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
         <Route element={<ProtectedLayout />}>
           <Route
@@ -83,32 +97,139 @@ function App() {
             }
           />
 
-          <Route path="/sell-order" element={<OrderPage />} />
-          <Route path="/purchase-order" element={<BuyBackOrderPage />} />
-          <Route path="/approval-order" element={<ApprovalOrderPage />} />
-          <Route path="/approved-order" element={<ApprovedOrderPage />} />
-
-          <Route path="/gold-price" element={<GoldPriceListPage />} />
-          <Route path="/sliver-price" element={<SliverPricePage />} />
-          <Route path="/diamond-price" element={<DiamondPricePage />} />
-
-          <Route path="/products" element={<ProductPage />} />
-          <Route path="/counters" element={<CounterPage />} />
-          <Route path="/accounts" element={<SellerPage />} />
-          <Route path="/customers" element={<CustomerPage />} />
-
-          <Route path="/category-types" element={<CategoryTypePage />} />
-          <Route path="/category" element={<CategoryPage />} />
-
-          <Route path="/materials" element={<MaterialPage />} />
-          <Route path="/create-product" element={<CreateProductForm />} />
-
           <Route
-            path="/promotion-sell-order"
-            element={<PromotionSellOrderPage />}
+            path="/profile"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier", "Manager"]}>
+                <Profile />
+              </ProtectedRoute>
+            }
           />
 
-<Route
+          <Route
+            path="/sell-order"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier"]}>
+                <OrderPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/purchase-order"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier"]}>
+                <BuyBackOrderPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/approval-order"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <ApprovalOrderPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/approved-order"
+            element={
+              <ProtectedRoute allowedRoles={["Cashier"]}>
+                <ApprovedOrderPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/gold-price"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <GoldPriceListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sliver-price"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <SliverPricePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/diamond-price"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <DiamondPricePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <ProductPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/counters"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <CounterPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/accounts"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customers"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <CustomerPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/category-types"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <CategoryTypePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/category"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <CategoryPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/materials"
+            element={
+              <ProtectedRoute allowedRoles={["Manager"]}>
+                <MaterialPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* <Route path="/create-product" element={<CreateProductForm />} /> */}
+
+          {/* <Route
+            path="/promotion-sell-order"
+            element={<PromotionSellOrderPage />}
+          /> */}
+
+          <Route
             path="/product/detail/:productId"
             element={
               <ProtectedRoute allowedRoles={["Manager"]}>

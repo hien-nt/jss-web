@@ -26,7 +26,7 @@ const Title = styled.h2`
 
 const columns = [
   {
-    title: "Loại vàng | ĐVT: 1.000đ/Chỉ",
+    title: "Loại vàng | ĐVT: gram",
     dataIndex: "materialName",
     key: "materialName",
   },

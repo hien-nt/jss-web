@@ -10,7 +10,7 @@ import {
   Row,
   Col,
   InputNumber,
-  DatePicker
+  DatePicker,
 } from "antd";
 import moment from "moment";
 
@@ -36,7 +36,6 @@ const MaterialPriceForm = ({
         buyPrice: initialData.buyPrice,
         sellPrice: initialData.sellPrice,
         effDate: moment(initialData.effDate),
-
       });
     } else {
       setFormType("Create");
@@ -65,7 +64,7 @@ const MaterialPriceForm = ({
 
         <Form.Item
           name="buyPrice"
-          label="Buy price for this material"
+          label="Giá mua của chất liệu này (VND)"
           rules={[{ required: true, message: "Please input a buy price!" }]}
         >
           <InputNumber min={0} />
@@ -73,7 +72,7 @@ const MaterialPriceForm = ({
 
         <Form.Item
           name="sellPrice"
-          label="Sell price for this material"
+          label="Giá bán của chất liệu này (VND)"
           rules={[{ required: true, message: "Please input a sell price!" }]}
         >
           <InputNumber min={0} />
@@ -88,9 +87,7 @@ const MaterialPriceForm = ({
         >
           <DatePicker
             defaultValue={
-              initialData?.effDate
-                ? moment(initialData.effDate)
-                : null
+              initialData?.effDate ? moment(initialData.effDate) : null
             }
           />
         </Form.Item>

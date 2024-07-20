@@ -32,7 +32,9 @@ const columns = (showModalForEdit, diamondPrices) => [
     dataIndex: "origin",
     key: "origin",
     filters: [
-      { text: "Natural", value: "Natural" },
+      { text: "Nature", value: "Nature" },
+      { text: "Lab", value: "Lab" },
+
     ],
     onFilter: (value, record) => record.origin.indexOf(value) === 0,
   },
@@ -65,7 +67,7 @@ const columns = (showModalForEdit, diamondPrices) => [
       { text: "IF", value: "IF" },
       { text: "VVS1", value: "VVS1" },
       { text: "VVS2", value: "VVS2" },
-      { text: "VS1", value: "VVS1" },
+      { text: "VS1", value: "VS1" },
       { text: "VS2", value: "VVS2" },
 
     ],
@@ -82,13 +84,13 @@ const columns = (showModalForEdit, diamondPrices) => [
     
   },
   {
-    title: "Sell Price",
+    title: "Giá Bán",
     dataIndex: "sellPrice",
     key: "sellPrice",
     render: (price) => formatCurrency(price),
   },
   {
-    title: "Buy Price",
+    title: "Giá Mua",
     dataIndex: "buyPrice",
     key: "buyPrice",
     render: (price) => formatCurrency(price),

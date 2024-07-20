@@ -210,7 +210,7 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
           <Col span={12}>
             <Form.Item
               name="productName"
-              label="Product Name"
+              label="Tên sản phẩm"
               rules={[{ required: true }]}
             >
               <Input />
@@ -292,7 +292,7 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
           <Col span={12}>
             <Form.Item
               name="priceRate"
-              label="Price Rate"
+              label="Price Rate (%)"
               rules={[{ required: true, validator: numberValidator }]}
             >
               <Input type="number" />
@@ -304,7 +304,7 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
             <Col span={12}>
               <Form.Item
                 name="materialId"
-                label="Material"
+                label="Chất liệu"
                 rules={[{ required: filteredMaterials.length > 0 }]}
               >
                 <Select allowClear>
@@ -322,7 +322,7 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
             <Col span={12}>
               <Form.Item
                 name="weight"
-                label="Weight"
+                label="Trọng lượng (gram)"
                 rules={[
                   { required: filteredMaterials.length > 0 },
                   { required: true, validator: numberValidator },

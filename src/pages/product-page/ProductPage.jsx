@@ -87,11 +87,9 @@ const columns = (counters, onEdit) => [
   {
     title: "Chi tiết",
     key: "chi tiết",
-      render: (text, record) => (
-        <Link to={`/product/detail/${record.productId}`}>
-         Chi tiết sản phẩm
-        </Link>
-      ),
+    render: (text, record) => (
+      <Link to={`/product/detail/${record.productId}`}>Chi tiết sản phẩm</Link>
+    ),
   },
   {
     title: "Actions",
@@ -102,14 +100,13 @@ const columns = (counters, onEdit) => [
       </Button>
     ),
   },
-
 ];
 
 const ProductPage = () => {
   const [product, setProduct] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [counters, setCounters]= useState([]);
+  const [counters, setCounters] = useState([]);
   const [updateDrawerVisible, setUpdateDrawerVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const customRequest = async (options) => {
@@ -127,7 +124,10 @@ const ProductPage = () => {
   const filteredProduct = product.filter(
     (product) =>
       product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.productId.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      product.productId
+        .toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
@@ -186,8 +186,10 @@ const ProductPage = () => {
         visible={drawerVisible}
         bodyStyle={{ paddingBottom: 80 }}
       >
-        <CreateProductForm onFinish={handleFormSubmit} customRequest={customRequest}
- />
+        <CreateProductForm
+          onFinish={handleFormSubmit}
+          customRequest={customRequest}
+        />
       </Drawer>
 
       <Drawer

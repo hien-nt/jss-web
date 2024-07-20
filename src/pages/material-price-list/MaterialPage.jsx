@@ -20,7 +20,7 @@ const columns = (materialTypes) => [
   //   key: "materialTypeId",
   // },
   {
-    title: "Material Name",
+    title: "Chất Liệu",
     dataIndex: "materialName",
     key: "materialName",
     // filters: materials((material) => ({
@@ -30,7 +30,7 @@ const columns = (materialTypes) => [
     // onFilter: (value, record) => record.materialName === value,
   },
   {
-    title: "Material Type Name",
+    title: "Phân Loại",
     dataIndex: "materialTypeName",
     key: "materialTypeName",
     filters: [

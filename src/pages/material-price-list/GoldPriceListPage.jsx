@@ -20,7 +20,7 @@ const columns = (showModalForEdit, materialsPrice) => [
   //   key: "materialId",
   // },
   {
-    title: "Material Name",
+    title: "Chất Liệu",
     dataIndex: "materialName",
     key: "materialName",
     filters: materialsPrice.map((materialsPrice) => ({
@@ -30,7 +30,7 @@ const columns = (showModalForEdit, materialsPrice) => [
     onFilter: (value, record) => record.materialName === value,
   },
   {
-    title: "Buy Price",
+    title: "Giá Mua",
     dataIndex: "buyPrice",
     key: "buyPrice",
     render: (price) =>
@@ -40,7 +40,7 @@ const columns = (showModalForEdit, materialsPrice) => [
       }).format(price),
   },
   {
-    title: "Sell Price",
+    title: "Giá Bán",
     dataIndex: "sellPrice",
     key: "sellPrice",
     render: (price) =>

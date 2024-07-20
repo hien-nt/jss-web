@@ -24,7 +24,7 @@ const columns = (showModalForEdit, categoryType) => [
   //   key: "categoryTypeId",
   // },
   {
-    title: "Category Type Name",
+    title: "Phân Loại",
     dataIndex: "categoryTypeName",
     key: "categoryTypeName",
     filters: categoryType.map((categoryType) => ({
@@ -34,7 +34,7 @@ const columns = (showModalForEdit, categoryType) => [
     onFilter: (value, record) => record.categoryTypeName === value,
   },
   {
-    title: "Status",
+    title: "Trạng Thái",
     dataIndex: "status",
     key: "status",
     filters: [

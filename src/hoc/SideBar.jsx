@@ -50,19 +50,19 @@ function Sidebar({ chooseHeader }) {
 
           getItem("Đơn Khuyến Mãi", "/approval-order", <BookOutlined />),
           getItem("Sản Phẩm", "/products", <SketchOutlined />),
-          getItem("Phân loại", "sub2", <BranchesOutlined />, [
-            getItem("Category Type", "/category-types"),
-            getItem("Category", "/category"),
+          getItem("Phân Loại", "sub2", <BranchesOutlined />, [
+            getItem("Phân Loại Sản Phẩm", "/category-types"),
+            getItem("Loại Sản Phẩm", "/category"),
           ]),
-          getItem("Material", "/materials", <GoldOutlined />),
+          getItem("Chất Liệu", "/materials", <GoldOutlined />),
 
         
 
 
-          getItem("Price List", "sub", <UnorderedListOutlined />, [
-            getItem("Gold Price", "/gold-price"),
-            getItem("Sliver Price", "/sliver-price"),
-            getItem("Diamond Price", "/diamond-price"),
+          getItem("Bảng Giá", "sub", <UnorderedListOutlined />, [
+            getItem("Giá Vàng", "/gold-price"),
+            getItem("Giá Bạc", "/sliver-price"),
+            getItem("Giá Kim Cương", "/diamond-price"),
           ]),
 
           // getItem("Gold Price", "/gold-price", <GoldOutlined />),

@@ -52,6 +52,7 @@ const ProductDetailPage = () => {
     materialCost,
     diamondCost,
     productMaterialCost,
+    diamondName,
     productDiamondCost,
     productionCost,
     productPrice,
@@ -104,13 +105,9 @@ const ProductDetailPage = () => {
                   <strong>Kích thước:</strong> {size}
                 </Text>
                 <br />
+              
                 <Text>
-                  <strong>Vật liệu:</strong> {materialName} ({materialWeight}{" "}
-                  gram)
-                </Text>
-                <br />
-                <Text>
-                  <strong>Danh mục:</strong> {categoryName}
+                  <strong>Loại sản phẩm:</strong> {categoryName}
                 </Text>
                 <br />
               </div>
@@ -143,10 +140,20 @@ const ProductDetailPage = () => {
               <div style={{ marginBottom: "20px" }}>
                 <Title level={4}>Chi phí chính</Title>
                 <Text>
+                  <strong>Chất liệu:</strong> {materialName} ({materialWeight}{" "}
+                  gram)
+                </Text>
+                <br />
+                <Text>
                   <strong>Chi phí vật liệu:</strong>{" "}
                   {formatCurrency(productMaterialCost)}
                 </Text>
                 <br />
+                <Text>
+                  <strong>Kim Cương:</strong>{" "}
+                  {diamondName}
+                </Text>
+                <br/>
                 <Text>
                   <strong>Chi phí kim cương:</strong>{" "}
                   {formatCurrency(productDiamondCost)}

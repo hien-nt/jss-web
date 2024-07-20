@@ -56,7 +56,7 @@ const CategoryTypeForm = ({
           <Col span={12}>
             <InputFormItem
               itemName="categoryTypeName"
-              itemLabel="Category Type Name"
+              itemLabel="Tên phân loại"
               required="true"
               message="Please fill category type name!"
             />

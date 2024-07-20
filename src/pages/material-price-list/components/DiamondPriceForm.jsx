@@ -55,7 +55,7 @@ const DiamondPriceForm = ({
 
         <Form.Item
           name="buyPrice"
-          label="Buy price for this diamond"
+          label="Giá mua của kim cương (VND)"
           rules={[{ required: true, message: "Please input a buy price!" }]}
         >
           <InputNumber min={0} />
@@ -63,7 +63,7 @@ const DiamondPriceForm = ({
 
         <Form.Item
           name="sellPrice"
-          label="Sell price for this diamond"
+          label="Giá bán của kim cương (VND)"
           rules={[{ required: true, message: "Please input a sell price!" }]}
         >
           <InputNumber min={0} />

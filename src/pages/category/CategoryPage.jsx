@@ -23,7 +23,7 @@ const columns = (showModalForEdit, categoryType, category) => [
   //   key: "categoryId",
   // },
   {
-    title: "Category Name",
+    title: "Loại Sản Phẩm",
     dataIndex: "categoryName",
     key: "categoryName",
     filters: category.map((category) => ({
@@ -33,13 +33,13 @@ const columns = (showModalForEdit, categoryType, category) => [
     onFilter: (value, record) => record.categoryName === value,
   },
   {
-    title: "Discount Rate",
+    title: "Discount",
     dataIndex: "discountRate",
     key: "discountRate",
     render: (discountRate) => `${discountRate}%`,
   },
   {
-    title: "Category Type Name",
+    title: "Phân Loại",
     dataIndex: "categoryTypeName",
     key: "categoryTypeName",
     filters: categoryType.map((categoryType) => ({
@@ -50,7 +50,7 @@ const columns = (showModalForEdit, categoryType, category) => [
   },
 
   {
-    title: "Status",
+    title: "Trạng Thái",
     dataIndex: "status",
     key: "status",
     filters: [

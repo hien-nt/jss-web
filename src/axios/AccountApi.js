@@ -26,7 +26,7 @@ export const AccountApi = {
   // deinactiveAccount: (accountId) => {
   //   return axiosClient.put(`/Accounts/status/${accountId}`);
   // },
-  // getCurrentAccount: () => {
-  //   return axiosClient.get("/Accounts");
-  // }
+  getCurrentAccount: () => {
+    return axiosClient.get("/Accounts");
+  }
 };

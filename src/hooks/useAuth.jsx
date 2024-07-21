@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true); // Start loading before the request
     try {
       const response = await axios.post(
-        "https://jssatsapi20240629152002.azurewebsites.net/api/Accounts/login",
+        "https://jssatsapi20240722054517.azurewebsites.net/api/Accounts/login",
         { username, password }
       );
       const { token, account, exexpiresIn } = response.data;

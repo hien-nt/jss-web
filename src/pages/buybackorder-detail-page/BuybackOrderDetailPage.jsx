@@ -84,7 +84,7 @@ const BuyBackOrderDetailPage = () => {
       );
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute(
+      link.setAttribute( 
         "download",
         `Invoice_OrderBuyBack_${orderBuyBackId}.pdf`
       ); // Dynamic filename

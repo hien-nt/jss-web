@@ -73,9 +73,15 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
     const selectedCategory = categories.find(
       (cat) => cat.categoryId === categoryId
     );
+    console.log("categoryId nhận từ select "+ categoryId)
+    console.log(categories)
+    console.log(selectedCategory)
+
+
     if (selectedCategory) {
       const { categoryTypeId } = selectedCategory;
       setCategoryTypeId(categoryTypeId);
+      console.log("category ne " + categoryTypeId)
 
       if (
         categoryTypeId === 1 ||
@@ -105,11 +111,12 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
 
   const handleDiamondSubmit = async (diamondValues) => {
     console.log("payload post product: " + JSON.stringify(diamondValues));
+    await fetchDiamonds(setDiamonds);
 
     try {
       const response = await DiamondApi.createDiamondWithPrice(diamondValues);
       const newDiamond = response.data;
-      await fetchDiamonds(setDiamonds);
+      // await fetchDiamonds(setDiamonds);
 
       // setDiamonds([...diamonds, newDiamond]);
       form.setFieldsValue({
@@ -349,7 +356,6 @@ const CreateProductForm = ({ onFinish, customRequest }) => {
                             {diamond.diamondName}
                           </Option>
                         ))}
-                        {/* {filteredDiamonds.map(diamond => renderDiamondOption({ code: diamond.diamondCode, name: diamond.diamondName }))} */}
                       </Select>
                     </Form.Item>
                   </Col>

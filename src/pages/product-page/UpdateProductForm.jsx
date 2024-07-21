@@ -23,11 +23,17 @@ import CreateDiamondForm from "./CreateDiamondFrom";
 
 const { Option } = Select;
 
-const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
+const UpdateProductForm = ({
+  productId,
+  onClose,
+  onUpdate,
+  customRequest,
+  categories,
+}) => {
   const [form] = Form.useForm();
   const [counters, setCounters] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [diamonds, setDiamonds] = useState([]);
   const [filteredMaterials, setFilteredMaterials] = useState([]);
@@ -39,13 +45,15 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [categoryRes, materialRes, diamondRes] = await Promise.all([
-          CategoryApi.getCategory(),
+        const [materialRes, diamondRes] = await Promise.all([
+          // CategoryApi.getCategory(),
           MaterialApi.getMaterials(),
           DiamondApi.getDiamonds(),
         ]);
+        // console.log("Categories response:", categoryRes.data);
 
-        setCategories(categoryRes.data);
+        // setCategories(categoryRes.data);
+        console.log(materialRes.data);
         setMaterials(materialRes.data);
         setDiamonds(diamondRes.data);
 
@@ -90,31 +98,46 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
     try {
       const response = await ProductApi.getProductById(productId);
       const productData = response.data;
+      if (productData.img) {
+        setFileList([
+          {
+            uid: "-1",
+            name: "image.jpg",
+            status: "done",
+            url: productData.img,
+          },
+        ]);
+      } else {
+        setFileList([]);
+      }
       console.log(productData);
+      console.log(filteredDiamonds);
       setInitialValues(productData);
       form.setFieldsValue({
         ...productData,
         materialId: productData.materialId,
         weight: productData.materialWeight,
-        diamonds:
-          productData.diamondCode === "No DiamondCode"
-            ? []
-            : [productData.diamondCode],
+        diamondCode: productData.diamondCode,
+
+        // diamonds:
+        //   productData.diamondCode === "No DiamondCode"
+        //     ? []
+        //     : [productData.diamondCode],
       });
-      // const selectedCategory = categories.find(
-      //   (cat) => cat.categoryId === productData.categoryId
-      // );
-      // if (selectedCategory) {
-      //   setCategoryTypeId(selectedCategory.categoryTypeId);
-      // }
-      console.log("categoryTypeId - " + categoryTypeId);
       const selectedCategory = categories.find(
         (cat) => cat.categoryId === productData.categoryId
       );
+      // console.log("product category id" + productData.categoryId);
+      // console.log(categories);
+      // console.log(selectedCategory);
+      console.log(materials)
       if (selectedCategory) {
-        setCategoryTypeId(selectedCategory.categoryTypeId);
-
-        handleCategoryChange(productData.categoryId, productData.materialId); // Call handleCategoryChange with materialId
+        const { categoryTypeId } = selectedCategory;
+        setCategoryTypeId(categoryTypeId);
+        console.log("categoryTypeId " + categoryTypeId);
+        const categoryId = productData.categoryId
+        const materialId = productData.materialId 
+        handleCategoryChange(categoryId, materialId); // Call handleCategoryChange with materialId
       }
       // handleCategoryChange(productData.categoryId);
     } catch (error) {
@@ -127,8 +150,8 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
       (cat) => cat.categoryId === categoryId
     );
     if (selectedCategory) {
-      const { categoryTypeId } = selectedCategory;
-      setCategoryTypeId(categoryTypeId);
+      // const { categoryTypeId } = selectedCategory;
+      // setCategoryTypeId(categoryTypeId);
 
       if (
         categoryTypeId === 1 ||
@@ -166,10 +189,11 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
       const newDiamond = response.data;
       await fetchDiamonds(setDiamonds);
       form.setFieldsValue({
-        diamonds: [
-          ...(form.getFieldValue("diamonds") || []),
-          newDiamond.diamondCode,
-        ],
+        // diamond: [
+        //   ...(form.getFieldValue("diamondCode") || []),
+        //   newDiamond.diamondCode,
+        // ],
+        diamondCode: newDiamond.diamondCode,
       });
       setDiamondDrawerVisible(false);
     } catch (error) {
@@ -183,10 +207,10 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
       materials: values.materialId
         ? [{ materialId: values.materialId, weight: values.materialWeight }]
         : [],
-      diamonds: Array.isArray(values.diamonds)
-        ? values.diamonds.map((code) => ({ diamondCode: code }))
-        : values.diamonds
-        ? [{ diamondCode: values.diamonds }]
+      diamonds: values.diamondCode
+        ? // ? values.diamonds.map((code) => ({ diamondCode: code }))
+          // : values.diamonds
+          [{ diamondCode: values.diamondCode }]
         : [],
     };
     console.log("payload update product: " + JSON.stringify(payload));
@@ -254,6 +278,7 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
             </Form.Item>
           </Col>
         </Row>
+
         <Form.Item name="img" label="Image URL">
           <Upload
             name="imageFile"
@@ -268,6 +293,9 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
             )}
           </Upload>
         </Form.Item>
+
+        
+
         <SelectFormItem
           itemName="counterId"
           itemLabel="Quầy"
@@ -331,44 +359,75 @@ const UpdateProductForm = ({ productId, onClose, onUpdate, customRequest }) => {
             </Form.Item>
           </Col>
         </Row>
+
         {categoryTypeId !== 3 && categoryTypeId !== null && (
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              name="materialId"
-              label="Material"
-              rules={[{ required: filteredMaterials.length > 0 }]}
-            >
-              <Select allowClear>
-                {filteredMaterials.map((material) => (
-                  <Option key={material.materialId} value={material.materialId}>
-                    {material.materialName}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="materialWeight"
-              label="Weight"
-              rules={[
-                { required: filteredMaterials.length > 0 },
-                { required: true, validator: numberValidator },
-              ]}
-            >
-              <Input type="number" />
-            </Form.Item>
-          </Col>
-        </Row>
-         )} 
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="materialId"
+                label="Material"
+                rules={[{ required: filteredMaterials.length > 0 }]}
+              >
+                <Select allowClear>
+                  {filteredMaterials.map((material) => (
+                    <Option
+                      key={material.materialId}
+                      value={material.materialId}
+                    >
+                      {material.materialName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="materialWeight"
+                label="Weight"
+                rules={[
+                  { required: filteredMaterials.length > 0 },
+                  { required: true, validator: numberValidator },
+                ]}
+              >
+                <Input type="number" />
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
         {(categoryTypeId === 3 || categoryTypeId === 4) &&
           categoryTypeId !== null && (
             <>
-              <Form.Item label="Diamonds">
+              {/* <Form.Item label="Diamonds">
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="diamonds">
+                      <Select allowClear>
+                        {filteredDiamonds.map((diamond) => (
+                          <Option
+                            key={diamond.diamondCode}
+                            value={diamond.diamondCode}
+                          >
+                            {diamond.diamondName}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Button
+                      type="dashed"
+                      onClick={() => setDiamondDrawerVisible(true)}
+                    >
+                      Create New Diamond
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item> */}
+
+              <Form.Item label="Diamonds">
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item name="diamondCode">
                       <Select allowClear>
                         {filteredDiamonds.map((diamond) => (
                           <Option

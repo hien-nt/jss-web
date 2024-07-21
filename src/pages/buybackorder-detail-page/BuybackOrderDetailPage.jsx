@@ -219,7 +219,7 @@ const BuyBackOrderDetailPage = () => {
                       alignItems: "center",
                     }}
                   >
-                   <Text strong>{item.productName || item.buyBackProductName}</Text>
+                   <Text strong>{item.productName || item.buyBackProductName || "Kim cương"}</Text>
                   </Col>
                   <Col
                     span={6}
@@ -229,7 +229,7 @@ const BuyBackOrderDetailPage = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Text strong>x{item.quantity}</Text>
+                    <Text strong>x1</Text>
                   </Col>
                   <Col span={4} style={{ textAlign: "right" }}>
                     <Text strong>{formatCurrency(item.price)}</Text>

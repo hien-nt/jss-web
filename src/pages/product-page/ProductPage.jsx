@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { getCounters } from "../../services/Counter/CounterServices";
 import UpdateProductForm from "./UpdateProductForm";
 import { Link } from "react-router-dom";
+import { getCategorys } from "../../services/Category/CategoryServices";
+import { getMaterials } from "../../services/Material/MaterialService";
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -109,9 +111,12 @@ const ProductPage = () => {
   const [counters, setCounters] = useState([]);
   const [updateDrawerVisible, setUpdateDrawerVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [category, setCategory] = useState([]);
+  const [materials, setMaterials] = useState([]);
+
+
   const customRequest = async (options) => {
     const { onSuccess, onError, file } = options;
-
     try {
       const response = await FileAPI.uploadFile(file);
       onSuccess(response.data, file);
@@ -133,6 +138,9 @@ const ProductPage = () => {
   useEffect(() => {
     getAllProduct(setProduct);
     getCounters(setCounters);
+    getCategorys(setCategory);
+    getMaterials(setMaterials);
+
   }, []);
 
   const showDrawerForNew = () => {
@@ -204,6 +212,8 @@ const ProductPage = () => {
           onClose={handleUpdateDrawerClose}
           onUpdate={handleFormSubmit}
           customRequest={customRequest}
+          categories={category}
+          // materials={materials}
         />
       </Drawer>
     </>

@@ -15,11 +15,10 @@ function CustomHeader({ headerTitle }) {
 
   const menu = (
      <Menu>
-      <Menu.Item key="0">
-        {/* Link is used directly here */}
+      {/* <Menu.Item key="0">
         <Link to="/profile">My Account</Link>
-      </Menu.Item>
-      <Menu.Divider />
+      </Menu.Item> */}
+      {/* <Menu.Divider /> */}
       <Menu.Item key="1" onClick={handleLogout}>
         Logout
       </Menu.Item>
